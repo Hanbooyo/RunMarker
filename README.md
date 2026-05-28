@@ -21,6 +21,12 @@ docker compose up -d
 .\gradlew.bat bootRun
 ```
 
+Windows 로컬 PostgreSQL 환경에서는 아래 스크립트로 실행할 수 있습니다.
+
+```powershell
+scripts\dev\run-backend-local.bat
+```
+
 테스트:
 
 ```bash
@@ -127,6 +133,12 @@ cd frontend
 npm install
 copy .env.example .env
 npm run dev
+```
+
+Windows에서는 아래 스크립트도 사용할 수 있습니다.
+
+```powershell
+scripts\dev\run-frontend-dev.bat
 ```
 
 테스트 및 빌드:
