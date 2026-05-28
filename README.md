@@ -11,6 +11,8 @@ Strava OAuth로 로그인한 사용자의 러닝 활동을 가져와, 시작 좌
 - MyBatis
 - Flyway
 
+실제 Strava 계정 테스트 환경 구성은 [docs/TEST_ENV.md](docs/TEST_ENV.md)를 참고하세요.
+
 실행:
 
 ```bash
