@@ -17,13 +17,13 @@ Strava OAuth로 로그인한 사용자의 러닝 활동을 가져와, 시작 좌
 
 ```bash
 docker compose up -d
-gradle bootRun
+.\gradlew.bat bootRun
 ```
 
 테스트:
 
 ```bash
-gradle test
+.\gradlew.bat test
 ```
 
 ### VS Code에서 Java 빌드하기
@@ -33,7 +33,7 @@ VS Code 자체가 Java를 빌드하는 것이 아니라, 로컬에 설치된 JDK
 필수 설치:
 
 - JDK 17
-- Gradle
+- Gradle Wrapper
 - VS Code Extension Pack for Java
 - Spring Boot Extension Pack
 - Gradle for Java
@@ -42,7 +42,7 @@ VS Code 자체가 Java를 빌드하는 것이 아니라, 로컬에 설치된 JDK
 
 ```powershell
 java -version
-gradle -v
+.\gradlew.bat --version
 ```
 
 VS Code에서 실행:

@@ -19,7 +19,7 @@ PowerShell:
 
 ```powershell
 java -version
-gradle -v
+.\gradlew.bat --version
 node -v
 npm -v
 docker --version
@@ -99,7 +99,7 @@ $env:FRONTEND_BASE_URL="http://localhost:5173"
 $env:CORS_ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
 $env:NOMINATIM_USER_AGENT="StravaMatePassport/0.1 local"
 
-gradle bootRun
+.\gradlew.bat bootRun
 ```
 
 Health check:
@@ -136,7 +136,7 @@ http://127.0.0.1:5173/login
 1. Docker Desktop 실행
 2. `docker compose up -d`
 3. 백엔드 환경변수 설정
-4. `gradle bootRun`
+4. `.\gradlew.bat bootRun`
 5. 프론트 `.env`에서 `VITE_DEMO_MODE=false`
 6. `cd frontend`
 7. `npm run dev`
