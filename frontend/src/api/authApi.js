@@ -1,4 +1,5 @@
 import { http } from './http'
+import { demoUser, isDemoMode } from './demoData'
 
 export const authApi = {
   getLoginUrl() {
@@ -6,11 +7,19 @@ export const authApi = {
   },
 
   async getMe() {
+    if (isDemoMode) {
+      return demoUser
+    }
+
     const { data } = await http.get('/api/auth/me')
     return data
   },
 
   async logout() {
+    if (isDemoMode) {
+      return
+    }
+
     await http.post('/api/auth/logout')
   },
 }

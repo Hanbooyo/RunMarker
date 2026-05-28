@@ -138,6 +138,48 @@ npm run build
 
 ```text
 VITE_API_BASE_URL=http://localhost:8080
+VITE_DEMO_MODE=false
+```
+
+## Demo Mode
+
+백엔드, PostgreSQL, Strava OAuth 없이 프론트 화면만 빠르게 확인하려면 demo mode를 사용합니다.
+
+PowerShell:
+
+```powershell
+cd frontend
+copy .env.example .env
+```
+
+`.env`를 아래처럼 수정합니다.
+
+```text
+VITE_API_BASE_URL=http://localhost:8080
+VITE_DEMO_MODE=true
+```
+
+실행:
+
+```powershell
+npm install
+npm run dev
+```
+
+브라우저에서 접속:
+
+```text
+http://127.0.0.1:5173/passport
+```
+
+demo mode에서는 다음 데이터가 mock으로 표시됩니다.
+
+- Running Passport 요약
+- 국가/도시 스탬프
+- Leaflet 지도 마커
+- 최근 방문 도시
+- 활동 목록/상세
+- 동기화 결과
 ```
 
 ## OAuth 흐름
