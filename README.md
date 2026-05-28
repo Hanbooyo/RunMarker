@@ -24,6 +24,56 @@ gradle bootRun
 gradle test
 ```
 
+### VS Code에서 Java 빌드하기
+
+VS Code 자체가 Java를 빌드하는 것이 아니라, 로컬에 설치된 JDK와 Gradle을 VS Code가 호출합니다.
+
+필수 설치:
+
+- JDK 17
+- Gradle
+- VS Code Extension Pack for Java
+- Spring Boot Extension Pack
+- Gradle for Java
+
+설치 확인:
+
+```powershell
+java -version
+gradle -v
+```
+
+VS Code에서 실행:
+
+1. `F:\workspace\StravaMate_Passport` 폴더를 엽니다.
+2. 추천 확장 설치 알림이 뜨면 설치합니다.
+3. `Ctrl+Shift+P`를 누릅니다.
+4. `Tasks: Run Task`를 선택합니다.
+5. 아래 task 중 하나를 실행합니다.
+
+```text
+Backend: test
+Backend: build
+Backend: bootRun
+Frontend: install
+Frontend: test
+Frontend: dev
+```
+
+현재 저장소에는 Gradle Wrapper(`gradlew.bat`)가 아직 없습니다. Gradle이 설치된 환경에서 아래 명령을 한 번 실행하면 Wrapper를 추가할 수 있습니다.
+
+```powershell
+gradle wrapper
+```
+
+Wrapper가 추가된 뒤에는 다음 명령을 사용할 수 있습니다.
+
+```powershell
+.\gradlew.bat test
+.\gradlew.bat build
+.\gradlew.bat bootRun
+```
+
 필수 환경변수:
 
 ```text

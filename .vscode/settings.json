@@ -1,0 +1,13 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true,
+  "java.test.config": {
+    "workingDirectory": "${workspaceFolder}"
+  },
+  "spring-boot.ls.java.home": "",
+  "tailwindCSS.includeLanguages": {
+    "vue": "html"
+  }
+}
