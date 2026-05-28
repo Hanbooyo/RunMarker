@@ -17,6 +17,53 @@ docker info
 
 `docker info`가 실패하면 Docker Desktop 초기 설정, WSL2 설정, 재부팅 여부를 먼저 확인해야 합니다.
 
+## Virtualization support not detected 오류
+
+Docker Desktop에서 아래 오류가 나오면 프로젝트 문제가 아니라 Windows/BIOS 가상화 설정 문제입니다.
+
+```text
+Virtualization support not detected
+Docker Desktop failed to start because virtualisation support wasn't detected.
+```
+
+확인 순서:
+
+1. 작업 관리자 열기
+2. `성능` 탭 선택
+3. `CPU` 선택
+4. 오른쪽 아래의 `가상화` 값 확인
+
+`사용 안 함`이면 BIOS/UEFI에서 Intel VT-x 또는 AMD-V/SVM을 켜야 합니다.
+
+일반적인 BIOS/UEFI 메뉴 이름:
+
+```text
+Intel CPU: Intel Virtualization Technology, VT-x
+AMD CPU: SVM Mode, AMD-V
+```
+
+설정 후 Windows를 완전히 재부팅합니다.
+
+Windows 기능도 필요합니다. 관리자 PowerShell에서 확인합니다.
+
+```powershell
+dism /online /get-featureinfo /featurename:VirtualMachinePlatform
+dism /online /get-featureinfo /featurename:Microsoft-Windows-Subsystem-Linux
+```
+
+꺼져 있다면 관리자 PowerShell에서 활성화합니다.
+
+```powershell
+dism /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+wsl --install
+wsl --set-default-version 2
+```
+
+그 다음 재부팅하고 Docker Desktop을 다시 실행합니다.
+
+BIOS/UEFI를 변경할 수 없는 PC라면 Docker 대신 로컬 PostgreSQL을 직접 설치해서 개발할 수 있습니다. 이 프로젝트는 Docker가 필수는 아니고 PostgreSQL만 있으면 백엔드 실행이 가능합니다.
+
 ## DB만 실행
 
 로컬 개발에서는 이 방식을 권장합니다.
