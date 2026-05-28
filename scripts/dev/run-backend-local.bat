@@ -12,4 +12,11 @@ set "CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173"
 set "NOMINATIM_USER_AGENT=StravaMatePassport/0.1 local"
 
 cd /d "%~dp0..\.."
+
+if exist ".env.backend.local" (
+    for /f "usebackq eol=# tokens=1,* delims==" %%A in (".env.backend.local") do (
+        if not "%%A"=="" set "%%A=%%B"
+    )
+)
+
 call gradlew.bat bootRun
