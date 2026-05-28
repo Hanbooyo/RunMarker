@@ -1,8 +1,9 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -12,6 +13,11 @@ const navItems = [
   { to: '/activities', label: 'Activities' },
   { to: '/sync', label: 'Sync' },
 ]
+
+async function logout() {
+  await authStore.logoutLocal()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -43,9 +49,9 @@ const navItems = [
         <button
           type="button"
           class="rounded border border-black/10 px-3 py-2 text-sm text-ink/70"
-          @click="authStore.logoutLocal"
+          @click="logout"
         >
-          Local Logout
+          로그아웃
         </button>
       </div>
 

@@ -12,6 +12,16 @@ const debugUserIdModel = computed({
   set: (value) => authStore.setDebugUserId(value),
 })
 
+async function continueWithLocalDevelopmentUser() {
+  const target = route.query.redirect || '/dashboard'
+  try {
+    await authStore.loginForLocalDevelopment()
+    router.push(target)
+  } catch {
+    // Error state is rendered from the auth store.
+  }
+}
+
 function continueWithDebugUser() {
   const target = route.query.redirect || '/dashboard'
   router.push(target)
@@ -32,15 +42,32 @@ function continueWithDebugUser() {
 
         <button
           type="button"
-          class="w-full rounded bg-trail px-4 py-3 text-sm font-semibold text-white"
+          class="w-full rounded bg-trail px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+          :disabled="authStore.isLoading"
           @click="authStore.loginWithStrava"
         >
           Strava로 로그인
         </button>
 
-        <div class="mt-6 border-t border-black/10 pt-5">
-          <label class="text-sm font-medium text-ink" for="debug-user-id">Local User ID</label>
-          <div class="mt-2 flex gap-2">
+        <button
+          type="button"
+          class="mt-3 w-full rounded border border-black/15 px-4 py-3 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:opacity-60"
+          :disabled="authStore.isLoading"
+          @click="continueWithLocalDevelopmentUser"
+        >
+          로컬 개발용 로그인
+        </button>
+
+        <p v-if="authStore.errorMessage" class="mt-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700">
+          {{ authStore.errorMessage }}
+        </p>
+
+        <details class="mt-6 border-t border-black/10 pt-5">
+          <summary class="cursor-pointer text-sm font-medium text-ink">
+            기존 Local User ID로 접속
+          </summary>
+
+          <div class="mt-3 flex gap-2">
             <input
               id="debug-user-id"
               v-model="debugUserIdModel"
@@ -55,7 +82,7 @@ function continueWithDebugUser() {
               이동
             </button>
           </div>
-        </div>
+        </details>
       </div>
     </section>
   </main>

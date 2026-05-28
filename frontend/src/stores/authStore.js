@@ -14,6 +14,22 @@ export const useAuthStore = defineStore('auth', () => {
     window.location.href = authApi.getLoginUrl()
   }
 
+  async function loginForLocalDevelopment() {
+    isLoading.value = true
+    errorMessage.value = ''
+
+    try {
+      user.value = await authApi.devLogin()
+      setDebugUserId('')
+    } catch (error) {
+      user.value = null
+      errorMessage.value = error.response?.data?.message || '로컬 로그인에 실패했습니다.'
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   function setDebugUserId(value) {
     debugUserId.value = value
 
@@ -56,6 +72,7 @@ export const useAuthStore = defineStore('auth', () => {
     errorMessage,
     isAuthenticated,
     loginWithStrava,
+    loginForLocalDevelopment,
     setDebugUserId,
     fetchMe,
     logoutLocal,

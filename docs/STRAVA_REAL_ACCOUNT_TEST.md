@@ -70,6 +70,8 @@ http://127.0.0.1:5173/login
 
 Strava 로그인 후 권한 요청 화면에서 활동 읽기 권한을 승인합니다.
 
+`STRAVA_CLIENT_ID` 또는 `STRAVA_CLIENT_SECRET`이 비어 있거나 `your-...` placeholder 그대로이면 `/login/error?error=missing_strava_config`로 이동합니다.
+
 현재 앱은 OAuth scope로 아래 값을 요청합니다.
 
 ```text
@@ -101,3 +103,9 @@ SELECT status, message, started_at, finished_at FROM sync_logs ORDER BY started_
 - 실제 계정 테스트 전에는 `frontend/.env` 변경 후 Vite dev server를 재시작해야 합니다.
 - 백엔드 `.env.backend.local` 변경 후에도 백엔드를 재시작해야 합니다.
 - Nominatim reverse geocoding은 공개 서비스이므로 반복 대량 테스트는 피합니다.
+
+## 로컬 개발용 로그인
+
+Strava OAuth 없이 화면과 세션 흐름만 확인하려면 로그인 화면에서 `로컬 개발용 로그인`을 누릅니다.
+
+이 기능은 `strava_athlete_id = -1`인 개발용 사용자를 DB에 만들고 세션에 로그인합니다. 실제 Strava token은 저장하지 않으므로 활동 동기화는 동작하지 않습니다.

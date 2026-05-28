@@ -8,6 +8,7 @@ import CitiesView from '@/views/CitiesView.vue'
 import ActivitiesView from '@/views/ActivitiesView.vue'
 import ActivityDetailView from '@/views/ActivityDetailView.vue'
 import SyncView from '@/views/SyncView.vue'
+import LoginErrorView from '@/views/LoginErrorView.vue'
 
 const routes = [
   {
@@ -19,6 +20,12 @@ const routes = [
   {
     path: '/login/success',
     redirect: '/dashboard',
+    meta: { public: true },
+  },
+  {
+    path: '/login/error',
+    name: 'login-error',
+    component: LoginErrorView,
     meta: { public: true },
   },
   {

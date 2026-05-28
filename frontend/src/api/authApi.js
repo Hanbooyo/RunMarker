@@ -22,4 +22,9 @@ export const authApi = {
 
     await http.post('/api/auth/logout')
   },
+
+  async devLogin() {
+    const { data } = await http.post('/api/auth/dev/login')
+    return data
+  },
 }

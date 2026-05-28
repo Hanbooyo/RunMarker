@@ -27,7 +27,11 @@ public class AuthController {
 
     @GetMapping("/login")
     public RedirectView login() {
-        return new RedirectView(authService.getStravaAuthorizationUrl());
+        try {
+            return new RedirectView(authService.getStravaAuthorizationUrl());
+        } catch (AuthException exception) {
+            return new RedirectView(buildFrontendRedirect(appProperties.auth().loginErrorPath(), "missing_strava_config"));
+        }
     }
 
     @GetMapping("/callback")

@@ -26,6 +26,7 @@ public class SecurityConfig {
                                 "/api/health",
                                 "/api/auth/me",
                                 "/api/auth/logout",
+                                "/api/auth/dev/**",
                                 "/api/auth/strava/**",
                                 "/api/sync/**",
                                 "/api/activities/**",

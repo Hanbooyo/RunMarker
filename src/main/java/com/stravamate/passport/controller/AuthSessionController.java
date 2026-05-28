@@ -1,6 +1,7 @@
 package com.stravamate.passport.controller;
 
 import com.stravamate.passport.dto.auth.AuthUserResponse;
+import com.stravamate.passport.dto.AuthCallbackResult;
 import com.stravamate.passport.security.CurrentUserResolver;
 import com.stravamate.passport.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,5 +39,12 @@ public class AuthSessionController {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    @PostMapping("/dev/login")
+    public AuthUserResponse devLogin(HttpServletRequest request) {
+        AuthCallbackResult result = authService.loginDevelopmentUser();
+        request.getSession(true).setAttribute(CurrentUserResolver.SESSION_USER_ID, result.userId());
+        return authService.getCurrentUser(result.userId());
     }
 }

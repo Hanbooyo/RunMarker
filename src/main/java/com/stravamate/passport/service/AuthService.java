@@ -22,6 +22,8 @@ import java.time.Instant;
 @Service
 public class AuthService {
 
+    private static final long DEVELOPMENT_ATHLETE_ID = -1L;
+
     private final AppProperties appProperties;
     private final StravaOAuthClient stravaOAuthClient;
     private final UserRepository userRepository;
@@ -51,6 +53,19 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
         return AuthUserResponse.from(user);
+    }
+
+    @Transactional
+    public AuthCallbackResult loginDevelopmentUser() {
+        User user = new User();
+        user.setStravaAthleteId(DEVELOPMENT_ATHLETE_ID);
+        user.setUsername("local-dev");
+        user.setFirstname("Local");
+        user.setLastname("Runner");
+        user.setProfileImageUrl(null);
+
+        User savedUser = userRepository.upsert(user);
+        return new AuthCallbackResult(savedUser.getId(), savedUser.getStravaAthleteId());
     }
 
     @Transactional
@@ -109,9 +124,12 @@ public class AuthService {
     }
 
     private void validateStravaClientConfig() {
-        if (!StringUtils.hasText(appProperties.strava().clientId())
-                || !StringUtils.hasText(appProperties.strava().clientSecret())) {
+        if (!isUsableSecret(appProperties.strava().clientId())
+                || !isUsableSecret(appProperties.strava().clientSecret())) {
             throw new AuthException("Strava client 설정이 없습니다. STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET 환경변수를 확인하세요.");
         }
+    }
+    private boolean isUsableSecret(String value) {
+        return StringUtils.hasText(value) && !value.startsWith("your-");
     }
 }
