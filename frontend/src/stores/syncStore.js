@@ -7,12 +7,12 @@ export const useSyncStore = defineStore('sync', () => {
   const lastResult = ref(null)
   const errorMessage = ref('')
 
-  async function syncActivities() {
+  async function syncActivities(mode = 'recent') {
     isSyncing.value = true
     errorMessage.value = ''
 
     try {
-      lastResult.value = await syncApi.syncActivities()
+      lastResult.value = await syncApi.syncActivities(mode)
       return lastResult.value
     } catch (error) {
       errorMessage.value = error.response?.data?.message || '동기화에 실패했습니다.'

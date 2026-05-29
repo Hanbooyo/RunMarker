@@ -85,8 +85,20 @@ read,activity:read_all
 로그인 성공 후:
 
 1. `/sync` 화면으로 이동
-2. 활동 동기화 실행
+2. 평소에는 `최근 100개 동기화` 실행
+3. 과거 전체 활동을 가져오려면 `전체 기간 동기화` 실행
 3. `/passport` 화면에서 국가/도시/지도 확인
+
+동기화 API:
+
+```text
+POST /api/sync/activities?mode=recent
+POST /api/sync/activities?mode=full
+```
+
+`recent`는 최신 활동 100개만 요청합니다. `full`은 Strava `/athlete/activities` 페이지를 끝까지 조회합니다.
+
+전체 기간 동기화는 활동 수, Nominatim reverse geocoding 호출 수, Strava rate limit 상태에 따라 오래 걸릴 수 있습니다. Strava rate limit에 가까워지면 동기화는 `PARTIAL_SUCCESS`로 멈추고, 나중에 다시 실행하면 중복 저장 없이 이어서 처리합니다.
 
 DB 확인:
 

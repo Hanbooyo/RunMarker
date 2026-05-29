@@ -16,8 +16,11 @@ import java.util.List;
 @Service
 public class ActivitySyncService {
 
-    private static final int FIRST_SYNC_LIMIT = 100;
-    private static final int PER_PAGE = 50;
+    private static final String MODE_RECENT = "recent";
+    private static final String MODE_FULL = "full";
+    private static final int RECENT_SYNC_LIMIT = 100;
+    private static final int PER_PAGE = 100;
+    private static final int RATE_LIMIT_SAFETY_BUFFER = 5;
 
     private final TokenRefreshService tokenRefreshService;
     private final StravaActivitiesClient stravaActivitiesClient;
@@ -43,6 +46,11 @@ public class ActivitySyncService {
     }
 
     public SyncActivitiesResponse syncRecentActivities(Long userId) {
+        return syncActivities(userId, MODE_RECENT);
+    }
+
+    public SyncActivitiesResponse syncActivities(Long userId, String mode) {
+        String normalizedMode = normalizeMode(mode);
         SyncLog syncLog = syncLogRepository.insertStarted(userId);
 
         int requestedCount = 0;
@@ -52,13 +60,13 @@ public class ActivitySyncService {
         int skippedCount = 0;
         String lastRateLimitLimit = null;
         String lastRateLimitUsage = null;
+        boolean stoppedNearRateLimit = false;
 
         try {
             String accessToken = tokenRefreshService.getValidAccessToken(userId);
 
-            for (int page = 1; requestedCount < FIRST_SYNC_LIMIT; page++) {
-                int remaining = FIRST_SYNC_LIMIT - requestedCount;
-                int perPage = Math.min(PER_PAGE, remaining);
+            for (int page = 1; shouldContinuePaging(normalizedMode, requestedCount); page++) {
+                int perPage = resolvePerPage(normalizedMode, requestedCount);
 
                 StravaActivitiesClient.StravaActivitiesPage activitiesPage =
                         stravaActivitiesClient.getAthleteActivities(accessToken, page, perPage);
@@ -74,30 +82,34 @@ public class ActivitySyncService {
                 requestedCount += activities.size();
 
                 for (StravaActivityResponse stravaActivity : activities) {
-                    if (!stravaActivity.isRun() || !stravaActivity.hasStartLatlng()) {
-                        skippedCount++;
-                        continue;
-                    }
-
-                    var insertedActivity = activityRepository.insertIfNotExists(toActivity(userId, stravaActivity));
-                    boolean inserted = insertedActivity.isPresent();
-
-                    if (inserted) {
-                        if (tryGeocode(insertedActivity.get())) {
-                            geocodedCount++;
-                        } else {
-                            geocodingFailedCount++;
+                    try {
+                        if (!stravaActivity.isRun() || !stravaActivity.hasStartLatlng()) {
+                            skippedCount++;
+                            continue;
                         }
-                        syncedCount++;
-                    } else {
-                        var existingActivity = activityRepository.findByUserIdAndStravaActivityId(userId, stravaActivity.id());
-                        if (existingActivity.isPresent() && existingActivity.get().getGeocodedAt() == null) {
-                            if (tryGeocode(existingActivity.get())) {
+
+                        var insertedActivity = activityRepository.insertIfNotExists(toActivity(userId, stravaActivity));
+                        boolean inserted = insertedActivity.isPresent();
+
+                        if (inserted) {
+                            if (tryGeocode(insertedActivity.get())) {
                                 geocodedCount++;
                             } else {
                                 geocodingFailedCount++;
                             }
+                            syncedCount++;
+                        } else {
+                            var existingActivity = activityRepository.findByUserIdAndStravaActivityId(userId, stravaActivity.id());
+                            if (existingActivity.isPresent() && existingActivity.get().getGeocodedAt() == null) {
+                                if (tryGeocode(existingActivity.get())) {
+                                    geocodedCount++;
+                                } else {
+                                    geocodingFailedCount++;
+                                }
+                            }
+                            skippedCount++;
                         }
+                    } catch (Exception exception) {
                         skippedCount++;
                     }
                 }
@@ -105,13 +117,19 @@ public class ActivitySyncService {
                 if (activities.size() < perPage) {
                     break;
                 }
+
+                if (isNearRateLimit(lastRateLimitLimit, lastRateLimitUsage)) {
+                    stoppedNearRateLimit = true;
+                    break;
+                }
             }
 
             userRepository.updateLastSyncedAt(userId);
-            String status = geocodingFailedCount > 0 ? "PARTIAL_SUCCESS" : "SUCCESS";
+            String status = geocodingFailedCount > 0 || stoppedNearRateLimit ? "PARTIAL_SUCCESS" : "SUCCESS";
             syncLogRepository.finish(syncLog.getId(), status, requestedCount, syncedCount, skippedCount, null);
 
             return new SyncActivitiesResponse(
+                    normalizedMode,
                     requestedCount,
                     syncedCount,
                     geocodedCount,
@@ -131,6 +149,52 @@ public class ActivitySyncService {
                     exception.getMessage()
             );
             throw exception;
+        }
+    }
+
+    private String normalizeMode(String mode) {
+        if (MODE_FULL.equalsIgnoreCase(mode)) {
+            return MODE_FULL;
+        }
+        return MODE_RECENT;
+    }
+
+    private boolean shouldContinuePaging(String mode, int requestedCount) {
+        return MODE_FULL.equals(mode) || requestedCount < RECENT_SYNC_LIMIT;
+    }
+
+    private int resolvePerPage(String mode, int requestedCount) {
+        if (MODE_FULL.equals(mode)) {
+            return PER_PAGE;
+        }
+        return Math.min(PER_PAGE, RECENT_SYNC_LIMIT - requestedCount);
+    }
+
+    private boolean isNearRateLimit(String limitHeader, String usageHeader) {
+        int[] limits = parseRateLimitHeader(limitHeader);
+        int[] usages = parseRateLimitHeader(usageHeader);
+        if (limits.length < 2 || usages.length < 2) {
+            return false;
+        }
+
+        return usages[0] >= limits[0] - RATE_LIMIT_SAFETY_BUFFER
+                || usages[1] >= limits[1] - RATE_LIMIT_SAFETY_BUFFER;
+    }
+
+    private int[] parseRateLimitHeader(String value) {
+        if (value == null || value.isBlank()) {
+            return new int[0];
+        }
+
+        String[] parts = value.split(",");
+        int[] parsed = new int[parts.length];
+        try {
+            for (int index = 0; index < parts.length; index++) {
+                parsed[index] = Integer.parseInt(parts[index].trim());
+            }
+            return parsed;
+        } catch (NumberFormatException exception) {
+            return new int[0];
         }
     }
 

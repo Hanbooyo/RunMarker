@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,9 +28,10 @@ public class SyncController {
     @PostMapping("/activities")
     public SyncActivitiesResponse syncActivities(
             HttpServletRequest request,
-            @RequestHeader(value = "X-User-Id", required = false) String userIdHeader
+            @RequestHeader(value = "X-User-Id", required = false) String userIdHeader,
+            @RequestParam(defaultValue = "recent") String mode
     ) {
         Long userId = currentUserResolver.resolveUserId(request, userIdHeader);
-        return activitySyncService.syncRecentActivities(userId);
+        return activitySyncService.syncActivities(userId, mode);
     }
 }

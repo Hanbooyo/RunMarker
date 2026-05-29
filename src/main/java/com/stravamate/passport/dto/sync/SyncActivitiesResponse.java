@@ -1,6 +1,7 @@
 package com.stravamate.passport.dto.sync;
 
 public record SyncActivitiesResponse(
+        String mode,
         int requestedCount,
         int syncedCount,
         int geocodedCount,
