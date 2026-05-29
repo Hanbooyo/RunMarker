@@ -14,9 +14,13 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+  forward-headers-strategy: ${SERVER_FORWARD_HEADERS_STRATEGY:none}
   servlet:
     session:
       timeout: ${SESSION_TIMEOUT:60m}
+      cookie:
+        secure: ${SESSION_COOKIE_SECURE:false}
+        same-site: ${SESSION_COOKIE_SAME_SITE:lax}
 
 mybatis:
   mapper-locations: classpath:mappers/**/*.xml
@@ -31,6 +35,11 @@ app:
   auth:
     login-success-path: ${AUTH_LOGIN_SUCCESS_PATH:/login/success}
     login-error-path: ${AUTH_LOGIN_ERROR_PATH:/login/error}
+  security:
+    dev-auth-enabled: ${DEV_AUTH_ENABLED:true}
+    debug-user-header-enabled: ${DEBUG_USER_HEADER_ENABLED:true}
+    token-cipher: ${TOKEN_CIPHER:noop}
+    token-encryption-key: ${TOKEN_ENCRYPTION_KEY:}
   strava:
     client-id: ${STRAVA_CLIENT_ID:}
     client-secret: ${STRAVA_CLIENT_SECRET:}

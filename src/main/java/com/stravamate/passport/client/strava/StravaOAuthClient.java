@@ -25,7 +25,7 @@ public class StravaOAuthClient {
         this.restClient = restClient;
     }
 
-    public String buildAuthorizationUrl() {
+    public String buildAuthorizationUrl(String state) {
         AppProperties.Strava strava = appProperties.strava();
 
         return UriComponentsBuilder.fromUriString(strava.authorizeUrl())
@@ -34,6 +34,7 @@ public class StravaOAuthClient {
                 .queryParam("response_type", RESPONSE_TYPE_CODE)
                 .queryParam("approval_prompt", APPROVAL_PROMPT_AUTO)
                 .queryParam("scope", SCOPE)
+                .queryParam("state", state)
                 .build()
                 .toUriString();
     }

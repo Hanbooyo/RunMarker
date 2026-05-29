@@ -13,12 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 @RestController
 @RequestMapping("/api/auth/strava")
 public class AuthController {
 
+    private static final String SESSION_OAUTH_STATE = "STRAVAMATE_OAUTH_STATE";
+
     private final AuthService authService;
     private final AppProperties appProperties;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public AuthController(AuthService authService, AppProperties appProperties) {
         this.authService = authService;
@@ -26,9 +32,11 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public RedirectView login() {
+    public RedirectView login(HttpSession session) {
         try {
-            return new RedirectView(authService.getStravaAuthorizationUrl());
+            String state = createState();
+            session.setAttribute(SESSION_OAUTH_STATE, state);
+            return new RedirectView(authService.getStravaAuthorizationUrl(state));
         } catch (AuthException exception) {
             return new RedirectView(buildFrontendRedirect(appProperties.auth().loginErrorPath(), "missing_strava_config"));
         }
@@ -39,6 +47,7 @@ public class AuthController {
             @RequestParam(required = false) String code,
             @RequestParam(required = false) String scope,
             @RequestParam(required = false) String error,
+            @RequestParam(required = false) String state,
             HttpSession session
     ) {
         if (error != null) {
@@ -46,6 +55,7 @@ public class AuthController {
         }
 
         try {
+            validateState(session, state);
             var result = authService.handleCallback(code, scope);
             session.setAttribute(CurrentUserResolver.SESSION_USER_ID, result.userId());
             return new RedirectView(buildFrontendRedirect(appProperties.auth().loginSuccessPath(), null));
@@ -64,5 +74,20 @@ public class AuthController {
         }
 
         return builder.build().toUriString();
+    }
+
+    private String createState() {
+        byte[] bytes = new byte[32];
+        secureRandom.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    private void validateState(HttpSession session, String state) {
+        Object expectedState = session.getAttribute(SESSION_OAUTH_STATE);
+        session.removeAttribute(SESSION_OAUTH_STATE);
+
+        if (!(expectedState instanceof String expected) || state == null || !expected.equals(state)) {
+            throw new AuthException("OAuth state 검증에 실패했습니다.");
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.stravamate.passport.controller;
 
+import com.stravamate.passport.config.AppProperties;
 import com.stravamate.passport.dto.auth.AuthUserResponse;
 import com.stravamate.passport.dto.AuthCallbackResult;
 import com.stravamate.passport.dto.auth.SessionStatusResponse;
+import com.stravamate.passport.exception.AuthException;
 import com.stravamate.passport.security.CurrentUserResolver;
 import com.stravamate.passport.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,10 +21,12 @@ public class AuthSessionController {
 
     private final AuthService authService;
     private final CurrentUserResolver currentUserResolver;
+    private final AppProperties appProperties;
 
-    public AuthSessionController(AuthService authService, CurrentUserResolver currentUserResolver) {
+    public AuthSessionController(AuthService authService, CurrentUserResolver currentUserResolver, AppProperties appProperties) {
         this.authService = authService;
         this.currentUserResolver = currentUserResolver;
+        this.appProperties = appProperties;
     }
 
     @GetMapping("/me")
@@ -60,6 +64,10 @@ public class AuthSessionController {
 
     @PostMapping("/dev/login")
     public AuthUserResponse devLogin(HttpServletRequest request) {
+        if (appProperties.security() == null || !appProperties.security().isDevAuthEnabled()) {
+            throw new AuthException("개발용 로그인은 현재 환경에서 비활성화되어 있습니다.");
+        }
+
         AuthCallbackResult result = authService.loginDevelopmentUser();
         request.getSession(true).setAttribute(CurrentUserResolver.SESSION_USER_ID, result.userId());
         return authService.getCurrentUser(result.userId());

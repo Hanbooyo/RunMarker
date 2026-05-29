@@ -7,6 +7,10 @@ export const http = axios.create({
 })
 
 http.interceptors.request.use((config) => {
+  if (import.meta.env.VITE_DEBUG_USER_HEADER_ENABLED !== 'true') {
+    return config
+  }
+
   const debugUserId = localStorage.getItem('stravamate.debugUserId')
 
   if (debugUserId) {

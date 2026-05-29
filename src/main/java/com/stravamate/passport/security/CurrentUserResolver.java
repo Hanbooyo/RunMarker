@@ -1,5 +1,6 @@
 package com.stravamate.passport.security;
 
+import com.stravamate.passport.config.AppProperties;
 import com.stravamate.passport.exception.AuthException;
 import com.stravamate.passport.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,9 +13,11 @@ public class CurrentUserResolver {
     public static final String SESSION_USER_ID = "STRAVAMATE_USER_ID";
 
     private final UserRepository userRepository;
+    private final AppProperties appProperties;
 
-    public CurrentUserResolver(UserRepository userRepository) {
+    public CurrentUserResolver(UserRepository userRepository, AppProperties appProperties) {
         this.userRepository = userRepository;
+        this.appProperties = appProperties;
     }
 
     public Long resolveUserId(HttpServletRequest request, String userIdHeader) {
@@ -48,6 +51,10 @@ public class CurrentUserResolver {
     }
 
     private Long resolveFromHeader(String userIdHeader) {
+        if (appProperties.security() == null || !appProperties.security().isDebugUserHeaderEnabled()) {
+            throw new AuthException("로그인 세션이 없습니다.");
+        }
+
         if (userIdHeader == null || userIdHeader.isBlank()) {
             throw new AuthException("로그인 세션이 없거나 X-User-Id 헤더가 없습니다.");
         }

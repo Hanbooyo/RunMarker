@@ -44,9 +44,9 @@ public class AuthService {
         this.tokenCipher = tokenCipher;
     }
 
-    public String getStravaAuthorizationUrl() {
+    public String getStravaAuthorizationUrl(String state) {
         validateStravaClientConfig();
-        return stravaOAuthClient.buildAuthorizationUrl();
+        return stravaOAuthClient.buildAuthorizationUrl(state);
     }
 
     public AuthUserResponse getCurrentUser(Long userId) {

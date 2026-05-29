@@ -140,6 +140,7 @@ class AuthServiceTest {
                 "http://localhost:5173",
                 new AppProperties.Cors("http://localhost:5173"),
                 new AppProperties.Auth("/login/success", "/login/error"),
+                new AppProperties.Security(true, true, "noop", null),
                 new AppProperties.Strava(
                         "client-id",
                         "client-secret",

@@ -7,6 +7,7 @@ public record AppProperties(
         String frontendBaseUrl,
         Cors cors,
         Auth auth,
+        Security security,
         Strava strava,
         Geocoding geocoding
 ) {
@@ -20,6 +21,21 @@ public record AppProperties(
             String loginSuccessPath,
             String loginErrorPath
     ) {
+    }
+
+    public record Security(
+            Boolean devAuthEnabled,
+            Boolean debugUserHeaderEnabled,
+            String tokenCipher,
+            String tokenEncryptionKey
+    ) {
+        public boolean isDevAuthEnabled() {
+            return Boolean.TRUE.equals(devAuthEnabled);
+        }
+
+        public boolean isDebugUserHeaderEnabled() {
+            return Boolean.TRUE.equals(debugUserHeaderEnabled);
+        }
     }
 
     public record Strava(

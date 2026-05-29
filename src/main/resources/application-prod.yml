@@ -1,0 +1,17 @@
+server:
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: true
+        same-site: none
+
+app:
+  security:
+    dev-auth-enabled: false
+    debug-user-header-enabled: false
+    token-cipher: aes-gcm
+
+logging:
+  level:
+    com.stravamate.passport: INFO
