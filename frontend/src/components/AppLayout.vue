@@ -60,16 +60,29 @@ onBeforeUnmount(() => {
 <template>
   <div class="min-h-screen bg-mist">
     <header class="border-b border-black/10 bg-white">
-      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-4">
-        <RouterLink to="/dashboard" class="flex items-center gap-3">
-          <div class="grid h-9 w-9 place-items-center rounded bg-trail text-sm font-bold text-white">
-            SM
-          </div>
-          <div>
-            <p class="text-sm font-semibold text-ink">StravaMate</p>
-            <p class="text-xs text-ink/60">Running Passport</p>
-          </div>
-        </RouterLink>
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-5 md:flex-row md:items-center md:justify-between">
+        <div class="flex w-full items-center justify-between gap-3 md:w-auto">
+          <RouterLink to="/dashboard" class="flex min-w-0 items-center gap-3">
+            <img
+              src="/app-icon.png"
+              alt=""
+              class="h-9 w-9 shrink-0 rounded object-cover"
+            />
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-ink">StravaMate</p>
+              <p class="truncate text-xs text-ink/60">Running Passport</p>
+            </div>
+          </RouterLink>
+
+          <button
+            type="button"
+            class="shrink-0 rounded border border-black/10 px-3 py-2 text-xs font-semibold text-ink/70 md:hidden"
+            :aria-label="i18n.t('common.language')"
+            @click="i18n.toggleLocale"
+          >
+            {{ i18n.locale === 'ko' ? 'EN' : 'KO' }}
+          </button>
+        </div>
 
         <nav class="hidden items-center gap-1 md:flex">
           <RouterLink
@@ -83,10 +96,10 @@ onBeforeUnmount(() => {
           </RouterLink>
         </nav>
 
-        <div class="flex items-center gap-2">
+        <div class="flex w-full flex-wrap items-center gap-2 md:w-auto md:justify-end">
           <button
             type="button"
-            class="rounded border border-black/10 px-3 py-2 text-xs font-semibold text-ink/70"
+            class="hidden rounded border border-black/10 px-3 py-2 text-xs font-semibold text-ink/70 md:inline-flex"
             :aria-label="i18n.t('common.language')"
             @click="i18n.toggleLocale"
           >
@@ -95,17 +108,17 @@ onBeforeUnmount(() => {
 
           <div
             v-if="showSessionStatus"
-            class="flex items-center gap-2 rounded border border-black/10 px-3 py-2 text-xs text-ink/65"
+            class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded border border-black/10 px-3 py-2 text-xs text-ink/65 sm:flex-none"
           >
-            <span>{{ i18n.t('common.session') }} {{ sessionTimeText }}</span>
-            <button type="button" class="font-semibold text-trail" @click="refreshSession">
+            <span class="whitespace-nowrap">{{ i18n.t('common.session') }} {{ sessionTimeText }}</span>
+            <button type="button" class="shrink-0 font-semibold text-trail" @click="refreshSession">
               {{ i18n.t('common.refresh') }}
             </button>
           </div>
 
           <button
             type="button"
-            class="rounded border border-black/10 px-3 py-2 text-sm text-ink/70"
+            class="shrink-0 rounded border border-black/10 px-3 py-2 text-sm text-ink/70"
             @click="logout"
           >
             {{ i18n.t('common.logout') }}
@@ -113,7 +126,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <nav class="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-5 pb-3 md:hidden">
+      <nav class="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 pb-3 sm:px-5 md:hidden">
         <RouterLink
           v-for="item in navItems"
           :key="item.to"
@@ -126,7 +139,7 @@ onBeforeUnmount(() => {
       </nav>
     </header>
 
-    <main class="mx-auto max-w-7xl px-5 py-6">
+    <main class="mx-auto max-w-7xl px-4 py-5 sm:px-5 sm:py-6">
       <slot />
     </main>
   </div>

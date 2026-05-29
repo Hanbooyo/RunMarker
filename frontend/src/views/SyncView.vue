@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import StatCard from '@/components/StatCard.vue'
@@ -8,6 +9,18 @@ import { formatInteger } from '@/utils/formatters'
 
 const i18n = useI18nStore()
 const syncStore = useSyncStore()
+
+const progressText = computed(() => {
+  if (!syncStore.lastResult || !syncStore.isSyncing) {
+    return ''
+  }
+
+  const requested = formatInteger(syncStore.lastResult.requestedCount || 0)
+  const synced = formatInteger(syncStore.lastResult.syncedCount || 0)
+  const geocoded = formatInteger(syncStore.lastResult.geocodedCount || 0)
+
+  return `${requested}건의 Activities 정보를 받아왔습니다. 저장 ${synced}건, 위치 변환 ${geocoded}건`
+})
 
 async function syncActivities(mode) {
   await syncStore.syncActivities(mode)
@@ -53,11 +66,26 @@ async function syncActivities(mode) {
       </section>
     </div>
 
+    <div
+      v-if="progressText"
+      class="mt-5 rounded border border-trail/20 bg-white/60 p-4 text-sm text-ink/50 shadow-sm"
+    >
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="font-medium text-ink/60">전체 동기화 진행 중</p>
+          <p class="mt-1">{{ progressText }}</p>
+        </div>
+        <div class="h-2 w-full overflow-hidden rounded bg-mist sm:w-56">
+          <div class="h-full w-2/3 animate-pulse rounded bg-trail/40"></div>
+        </div>
+      </div>
+    </div>
+
     <p v-if="syncStore.errorMessage" class="mt-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
       {{ syncStore.errorMessage }}
     </p>
 
-    <div v-if="syncStore.lastResult" class="mt-6 grid gap-4 md:grid-cols-4">
+    <div v-if="syncStore.lastResult" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard :label="i18n.t('sync.requested')" :value="formatInteger(syncStore.lastResult.requestedCount)" />
       <StatCard :label="i18n.t('sync.synced')" :value="formatInteger(syncStore.lastResult.syncedCount)" />
       <StatCard :label="i18n.t('sync.geocoded')" :value="formatInteger(syncStore.lastResult.geocodedCount)" />
@@ -78,7 +106,7 @@ async function syncActivities(mode) {
         {{ syncStore.lastResult.rateLimitUsage || '-' }} /
         {{ syncStore.lastResult.rateLimitLimit || '-' }}
       </p>
-      <pre class="mt-4 overflow-x-auto rounded bg-mist p-3 text-xs">{{ syncStore.lastResult }}</pre>
+      <pre class="mt-4 max-w-full overflow-x-auto rounded bg-mist p-3 text-xs">{{ syncStore.lastResult }}</pre>
     </div>
   </AppLayout>
 </template>
