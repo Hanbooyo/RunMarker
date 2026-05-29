@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: stravamate-passport-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SESSION_TIMEOUT
+        value: 60m
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: FRONTEND_BASE_URL
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: STRAVA_CLIENT_ID
+        sync: false
+      - key: STRAVA_CLIENT_SECRET
+        sync: false
+      - key: STRAVA_REDIRECT_URI
+        sync: false
+      - key: TOKEN_CIPHER
+        value: aes-gcm
+      - key: TOKEN_ENCRYPTION_KEY
+        sync: false
+      - key: DEV_AUTH_ENABLED
+        value: false
+      - key: DEBUG_USER_HEADER_ENABLED
+        value: false
+      - key: GEOCODING_PROVIDER
+        value: nominatim
+      - key: NOMINATIM_USER_AGENT
+        sync: false
+      - key: GEOCODING_CACHE_COORDINATE_SCALE
+        value: 3
