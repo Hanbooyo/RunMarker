@@ -1,9 +1,12 @@
 <script setup>
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const now = ref(Date.now())
+let timerId = null
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -14,16 +17,48 @@ const navItems = [
   { to: '/sync', label: 'Sync' },
 ]
 
+const remainingSeconds = computed(() => {
+  const expiresAt = authStore.session?.expiresAtEpochMillis || 0
+  return Math.max(0, Math.ceil((expiresAt - now.value) / 1000))
+})
+
+const sessionTimeText = computed(() => {
+  const seconds = remainingSeconds.value
+  const minutes = Math.floor(seconds / 60)
+  const restSeconds = seconds % 60
+  return `${String(minutes).padStart(2, '0')}:${String(restSeconds).padStart(2, '0')}`
+})
+
+const showSessionStatus = computed(() => Boolean(authStore.session?.authenticated))
+
 async function logout() {
   await authStore.logoutLocal()
   router.push('/login')
 }
+
+async function refreshSession() {
+  await authStore.refreshSession()
+  now.value = Date.now()
+}
+
+onMounted(async () => {
+  await authStore.fetchSession()
+  timerId = window.setInterval(() => {
+    now.value = Date.now()
+  }, 1000)
+})
+
+onBeforeUnmount(() => {
+  if (timerId) {
+    window.clearInterval(timerId)
+  }
+})
 </script>
 
 <template>
   <div class="min-h-screen bg-mist">
     <header class="border-b border-black/10 bg-white">
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-4">
         <RouterLink to="/dashboard" class="flex items-center gap-3">
           <div class="grid h-9 w-9 place-items-center rounded bg-trail text-sm font-bold text-white">
             SM
@@ -46,13 +81,25 @@ async function logout() {
           </RouterLink>
         </nav>
 
-        <button
-          type="button"
-          class="rounded border border-black/10 px-3 py-2 text-sm text-ink/70"
-          @click="logout"
-        >
-          로그아웃
-        </button>
+        <div class="flex items-center gap-2">
+          <div
+            v-if="showSessionStatus"
+            class="flex items-center gap-2 rounded border border-black/10 px-3 py-2 text-xs text-ink/65"
+          >
+            <span>세션 {{ sessionTimeText }}</span>
+            <button type="button" class="font-semibold text-trail" @click="refreshSession">
+              갱신
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="rounded border border-black/10 px-3 py-2 text-sm text-ink/70"
+            @click="logout"
+          >
+            로그아웃
+          </button>
+        </div>
       </div>
 
       <nav class="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-5 pb-3 md:hidden">

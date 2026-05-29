@@ -33,6 +33,7 @@ STRAVA_REDIRECT_URI=http://localhost:8080/api/auth/strava/callback
 FRONTEND_BASE_URL=http://localhost:5173
 CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 NOMINATIM_USER_AGENT=StravaMatePassport/0.1 local
+SESSION_TIMEOUT=60m
 ```
 
 `.env.backend.local`은 git에 올리지 않습니다.
@@ -115,6 +116,7 @@ SELECT status, message, started_at, finished_at FROM sync_logs ORDER BY started_
 - 실제 계정 테스트 전에는 `frontend/.env` 변경 후 Vite dev server를 재시작해야 합니다.
 - 백엔드 `.env.backend.local` 변경 후에도 백엔드를 재시작해야 합니다.
 - Nominatim reverse geocoding은 공개 서비스이므로 반복 대량 테스트는 피합니다.
+- 로그인 세션 유지 시간은 기본 1시간입니다. 변경하려면 `SESSION_TIMEOUT` 값을 수정합니다.
 
 ## 로컬 개발용 로그인
 

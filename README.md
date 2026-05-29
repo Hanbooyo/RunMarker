@@ -90,6 +90,7 @@ Wrapper가 추가된 뒤에는 다음 명령을 사용할 수 있습니다.
 DB_URL=jdbc:postgresql://localhost:5432/stravamate_passport
 DB_USERNAME=stravamate
 DB_PASSWORD=stravamate
+SESSION_TIMEOUT=60m
 STRAVA_CLIENT_ID=your-client-id
 STRAVA_CLIENT_SECRET=your-client-secret
 STRAVA_REDIRECT_URI=http://localhost:8080/api/auth/strava/callback

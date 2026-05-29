@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const debugUserId = ref(localStorage.getItem('stravamate.debugUserId') || '')
   const isLoading = ref(false)
   const errorMessage = ref('')
+  const session = ref(null)
 
   const isAuthenticated = computed(() => Boolean(user.value || debugUserId.value))
 
@@ -20,6 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       user.value = await authApi.devLogin()
+      await fetchSession()
       setDebugUserId('')
     } catch (error) {
       user.value = null
@@ -54,6 +56,21 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function fetchSession() {
+    try {
+      session.value = await authApi.getSession()
+      return session.value
+    } catch {
+      session.value = null
+      return null
+    }
+  }
+
+  async function refreshSession() {
+    session.value = await authApi.refreshSession()
+    return session.value
+  }
+
   async function logoutLocal() {
     try {
       await authApi.logout()
@@ -62,12 +79,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     user.value = null
+    session.value = null
     setDebugUserId('')
   }
 
   return {
     user,
     debugUserId,
+    session,
     isLoading,
     errorMessage,
     isAuthenticated,
@@ -75,6 +94,8 @@ export const useAuthStore = defineStore('auth', () => {
     loginForLocalDevelopment,
     setDebugUserId,
     fetchMe,
+    fetchSession,
+    refreshSession,
     logoutLocal,
   }
 })

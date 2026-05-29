@@ -23,6 +23,34 @@ export const authApi = {
     await http.post('/api/auth/logout')
   },
 
+  async getSession() {
+    if (isDemoMode) {
+      return {
+        authenticated: true,
+        maxInactiveIntervalSeconds: 3600,
+        remainingSeconds: 3600,
+        expiresAtEpochMillis: Date.now() + 3600 * 1000,
+      }
+    }
+
+    const { data } = await http.get('/api/auth/session')
+    return data
+  },
+
+  async refreshSession() {
+    if (isDemoMode) {
+      return {
+        authenticated: true,
+        maxInactiveIntervalSeconds: 3600,
+        remainingSeconds: 3600,
+        expiresAtEpochMillis: Date.now() + 3600 * 1000,
+      }
+    }
+
+    const { data } = await http.post('/api/auth/session/refresh')
+    return data
+  },
+
   async devLogin() {
     const { data } = await http.post('/api/auth/dev/login')
     return data
