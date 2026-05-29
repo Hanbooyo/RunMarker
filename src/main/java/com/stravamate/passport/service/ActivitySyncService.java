@@ -3,15 +3,21 @@ package com.stravamate.passport.service;
 import com.stravamate.passport.client.strava.StravaActivitiesClient;
 import com.stravamate.passport.domain.entity.Activity;
 import com.stravamate.passport.domain.entity.SyncLog;
+import com.stravamate.passport.dto.sync.SyncJobStartResponse;
+import com.stravamate.passport.dto.sync.SyncJobStatusResponse;
 import com.stravamate.passport.dto.strava.StravaActivityResponse;
 import com.stravamate.passport.dto.sync.SyncActivitiesResponse;
 import com.stravamate.passport.exception.GeocodingException;
+import com.stravamate.passport.exception.ResourceNotFoundException;
 import com.stravamate.passport.repository.ActivityRepository;
 import com.stravamate.passport.repository.SyncLogRepository;
 import com.stravamate.passport.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Service
 public class ActivitySyncService {
@@ -28,6 +34,7 @@ public class ActivitySyncService {
     private final SyncLogRepository syncLogRepository;
     private final UserRepository userRepository;
     private final GeocodingService geocodingService;
+    private final Executor syncTaskExecutor;
 
     public ActivitySyncService(
             TokenRefreshService tokenRefreshService,
@@ -35,7 +42,8 @@ public class ActivitySyncService {
             ActivityRepository activityRepository,
             SyncLogRepository syncLogRepository,
             UserRepository userRepository,
-            GeocodingService geocodingService
+            GeocodingService geocodingService,
+            @Qualifier("syncTaskExecutor") Executor syncTaskExecutor
     ) {
         this.tokenRefreshService = tokenRefreshService;
         this.stravaActivitiesClient = stravaActivitiesClient;
@@ -43,6 +51,7 @@ public class ActivitySyncService {
         this.syncLogRepository = syncLogRepository;
         this.userRepository = userRepository;
         this.geocodingService = geocodingService;
+        this.syncTaskExecutor = syncTaskExecutor;
     }
 
     public SyncActivitiesResponse syncRecentActivities(Long userId) {
@@ -51,7 +60,26 @@ public class ActivitySyncService {
 
     public SyncActivitiesResponse syncActivities(Long userId, String mode) {
         String normalizedMode = normalizeMode(mode);
-        SyncLog syncLog = syncLogRepository.insertStarted(userId);
+        SyncLog syncLog = syncLogRepository.insertStarted(userId, normalizedMode);
+        return runSync(userId, normalizedMode, syncLog);
+    }
+
+    public SyncJobStartResponse startActivitiesSyncJob(Long userId, String mode) {
+        String normalizedMode = normalizeMode(mode);
+        SyncLog syncLog = syncLogRepository.insertStarted(userId, normalizedMode);
+
+        CompletableFuture.runAsync(() -> runSync(userId, normalizedMode, syncLog), syncTaskExecutor);
+
+        return new SyncJobStartResponse(syncLog.getId(), normalizedMode, syncLog.getStatus());
+    }
+
+    public SyncJobStatusResponse getSyncJobStatus(Long userId, Long syncLogId) {
+        return syncLogRepository.findByIdAndUserId(syncLogId, userId)
+                .map(SyncJobStatusResponse::from)
+                .orElseThrow(() -> new ResourceNotFoundException("동기화 작업을 찾을 수 없습니다."));
+    }
+
+    private SyncActivitiesResponse runSync(Long userId, String normalizedMode, SyncLog syncLog) {
 
         int requestedCount = 0;
         int syncedCount = 0;
@@ -114,6 +142,17 @@ public class ActivitySyncService {
                     }
                 }
 
+                syncLogRepository.updateProgress(
+                        syncLog.getId(),
+                        requestedCount,
+                        syncedCount,
+                        geocodedCount,
+                        geocodingFailedCount,
+                        skippedCount,
+                        lastRateLimitLimit,
+                        lastRateLimitUsage
+                );
+
                 if (activities.size() < perPage) {
                     break;
                 }
@@ -126,7 +165,18 @@ public class ActivitySyncService {
 
             userRepository.updateLastSyncedAt(userId);
             String status = geocodingFailedCount > 0 || stoppedNearRateLimit ? "PARTIAL_SUCCESS" : "SUCCESS";
-            syncLogRepository.finish(syncLog.getId(), status, requestedCount, syncedCount, skippedCount, null);
+            syncLogRepository.finish(
+                    syncLog.getId(),
+                    status,
+                    requestedCount,
+                    syncedCount,
+                    geocodedCount,
+                    geocodingFailedCount,
+                    skippedCount,
+                    lastRateLimitLimit,
+                    lastRateLimitUsage,
+                    null
+            );
 
             return new SyncActivitiesResponse(
                     normalizedMode,
@@ -145,7 +195,11 @@ public class ActivitySyncService {
                     "FAILED",
                     requestedCount,
                     syncedCount,
+                    geocodedCount,
+                    geocodingFailedCount,
                     skippedCount,
+                    lastRateLimitLimit,
+                    lastRateLimitUsage,
                     exception.getMessage()
             );
             throw exception;

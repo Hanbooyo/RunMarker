@@ -23,4 +23,41 @@ export const syncApi = {
     })
     return data
   },
+
+  async startActivitiesSyncJob(mode = 'full') {
+    if (isDemoMode) {
+      return {
+        syncLogId: 1,
+        mode,
+        status: 'STARTED',
+      }
+    }
+
+    const { data } = await http.post('/api/sync/activities/jobs', null, {
+      params: { mode },
+      timeout: 15000,
+    })
+    return data
+  },
+
+  async getActivitiesSyncJob(syncLogId) {
+    if (isDemoMode) {
+      return {
+        syncLogId,
+        mode: 'full',
+        status: 'SUCCESS',
+        requestedCount: 100,
+        syncedCount: 2,
+        geocodedCount: 2,
+        geocodingFailedCount: 0,
+        skippedCount: 98,
+        rateLimitLimit: '200,2000',
+        rateLimitUsage: '1,1',
+        errorMessage: null,
+      }
+    }
+
+    const { data } = await http.get(`/api/sync/activities/jobs/${syncLogId}`)
+    return data
+  },
 }

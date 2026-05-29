@@ -7,10 +7,15 @@ public class SyncLog {
     private Long id;
     private Long userId;
     private String syncType;
+    private String mode;
     private String status;
     private Integer requestedCount;
     private Integer syncedCount;
+    private Integer geocodedCount;
+    private Integer geocodingFailedCount;
     private Integer skippedCount;
+    private String rateLimitLimit;
+    private String rateLimitUsage;
     private String errorMessage;
     private Instant startedAt;
     private Instant finishedAt;
@@ -39,6 +44,14 @@ public class SyncLog {
         this.syncType = syncType;
     }
 
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -63,12 +76,44 @@ public class SyncLog {
         this.syncedCount = syncedCount;
     }
 
+    public Integer getGeocodedCount() {
+        return geocodedCount;
+    }
+
+    public void setGeocodedCount(Integer geocodedCount) {
+        this.geocodedCount = geocodedCount;
+    }
+
+    public Integer getGeocodingFailedCount() {
+        return geocodingFailedCount;
+    }
+
+    public void setGeocodingFailedCount(Integer geocodingFailedCount) {
+        this.geocodingFailedCount = geocodingFailedCount;
+    }
+
     public Integer getSkippedCount() {
         return skippedCount;
     }
 
     public void setSkippedCount(Integer skippedCount) {
         this.skippedCount = skippedCount;
+    }
+
+    public String getRateLimitLimit() {
+        return rateLimitLimit;
+    }
+
+    public void setRateLimitLimit(String rateLimitLimit) {
+        this.rateLimitLimit = rateLimitLimit;
+    }
+
+    public String getRateLimitUsage() {
+        return rateLimitUsage;
+    }
+
+    public void setRateLimitUsage(String rateLimitUsage) {
+        this.rateLimitUsage = rateLimitUsage;
     }
 
     public String getErrorMessage() {
