@@ -8,7 +8,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const i18n = useI18nStore()
-const localDevAuthEnabled = import.meta.env.VITE_LOCAL_DEV_AUTH_ENABLED !== 'false'
+const localDevAuthEnabled = import.meta.env.DEV || import.meta.env.VITE_LOCAL_DEV_AUTH_ENABLED === 'true'
 const debugUserHeaderEnabled = import.meta.env.VITE_DEBUG_USER_HEADER_ENABLED === 'true'
 
 const debugUserIdModel = computed({
@@ -45,7 +45,6 @@ function continueWithDebugUser() {
         </div>
 
         <button
-          v-if="localDevAuthEnabled"
           type="button"
           class="w-full rounded bg-trail px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
           :disabled="authStore.isLoading"
@@ -55,6 +54,7 @@ function continueWithDebugUser() {
         </button>
 
         <button
+          v-if="localDevAuthEnabled"
           type="button"
           class="mt-3 w-full rounded border border-black/15 px-4 py-3 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:opacity-60"
           :disabled="authStore.isLoading"
