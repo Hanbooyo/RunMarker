@@ -2,19 +2,21 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useI18nStore } from '@/stores/i18nStore'
 
 const authStore = useAuthStore()
+const i18n = useI18nStore()
 const router = useRouter()
 const now = ref(Date.now())
 let timerId = null
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/passport', label: 'Passport' },
-  { to: '/countries', label: 'Countries' },
-  { to: '/cities', label: 'Cities' },
-  { to: '/activities', label: 'Activities' },
-  { to: '/sync', label: 'Sync' },
+  { to: '/dashboard', labelKey: 'nav.dashboard' },
+  { to: '/passport', labelKey: 'nav.passport' },
+  { to: '/countries', labelKey: 'nav.countries' },
+  { to: '/cities', labelKey: 'nav.cities' },
+  { to: '/activities', labelKey: 'nav.activities' },
+  { to: '/sync', labelKey: 'nav.sync' },
 ]
 
 const remainingSeconds = computed(() => {
@@ -77,18 +79,27 @@ onBeforeUnmount(() => {
             class="rounded px-3 py-2 text-sm font-medium text-ink/70 hover:bg-mist hover:text-ink"
             active-class="bg-mist text-ink"
           >
-            {{ item.label }}
+            {{ i18n.t(item.labelKey) }}
           </RouterLink>
         </nav>
 
         <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="rounded border border-black/10 px-3 py-2 text-xs font-semibold text-ink/70"
+            :aria-label="i18n.t('common.language')"
+            @click="i18n.toggleLocale"
+          >
+            {{ i18n.locale === 'ko' ? 'EN' : 'KO' }}
+          </button>
+
           <div
             v-if="showSessionStatus"
             class="flex items-center gap-2 rounded border border-black/10 px-3 py-2 text-xs text-ink/65"
           >
-            <span>세션 {{ sessionTimeText }}</span>
+            <span>{{ i18n.t('common.session') }} {{ sessionTimeText }}</span>
             <button type="button" class="font-semibold text-trail" @click="refreshSession">
-              갱신
+              {{ i18n.t('common.refresh') }}
             </button>
           </div>
 
@@ -97,7 +108,7 @@ onBeforeUnmount(() => {
             class="rounded border border-black/10 px-3 py-2 text-sm text-ink/70"
             @click="logout"
           >
-            로그아웃
+            {{ i18n.t('common.logout') }}
           </button>
         </div>
       </div>
@@ -110,7 +121,7 @@ onBeforeUnmount(() => {
           class="shrink-0 rounded px-3 py-2 text-sm font-medium text-ink/70"
           active-class="bg-mist text-ink"
         >
-          {{ item.label }}
+          {{ i18n.t(item.labelKey) }}
         </RouterLink>
       </nav>
     </header>

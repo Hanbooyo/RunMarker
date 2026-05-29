@@ -3,8 +3,10 @@ import { computed, onMounted, ref } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { passportApi } from '@/api/passportApi'
+import { useI18nStore } from '@/stores/i18nStore'
 import { formatDate, formatInteger, formatKm } from '@/utils/formatters'
 
+const i18n = useI18nStore()
 const countries = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
@@ -12,12 +14,12 @@ const sortKey = ref('totalDistanceKm')
 const sortDirection = ref('desc')
 
 const columns = [
-  { key: 'countryName', label: '국가', type: 'text' },
-  { key: 'cityCount', label: '도시', type: 'number' },
-  { key: 'activityCount', label: '활동', type: 'number' },
-  { key: 'totalDistanceKm', label: '거리', type: 'number' },
-  { key: 'firstActivityAt', label: '첫 러닝', type: 'date' },
-  { key: 'lastActivityAt', label: '최근 러닝', type: 'date' },
+  { key: 'countryName', labelKey: 'countries.country', type: 'text' },
+  { key: 'cityCount', labelKey: 'countries.cities', type: 'number' },
+  { key: 'activityCount', labelKey: 'countries.activities', type: 'number' },
+  { key: 'totalDistanceKm', labelKey: 'countries.distance', type: 'number' },
+  { key: 'firstActivityAt', labelKey: 'countries.firstRun', type: 'date' },
+  { key: 'lastActivityAt', labelKey: 'countries.latestRun', type: 'date' },
 ]
 
 const sortedCountries = computed(() => {
@@ -40,7 +42,7 @@ async function loadCountries() {
     const data = await passportApi.getCountries()
     countries.value = data.countries || []
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || '국가 목록을 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || i18n.t('countries.loadError')
   } finally {
     isLoading.value = false
   }
@@ -85,9 +87,9 @@ onMounted(loadCountries)
 
 <template>
   <AppLayout>
-    <PageHeader title="Countries" description="국가별 누적 거리와 활동 수를 비교합니다." />
+    <PageHeader :title="i18n.t('countries.title')" :description="i18n.t('countries.description')" />
 
-    <p v-if="isLoading" class="text-sm text-ink/60">불러오는 중입니다.</p>
+    <p v-if="isLoading" class="text-sm text-ink/60">{{ i18n.t('common.loading') }}</p>
     <p v-else-if="errorMessage" class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
       {{ errorMessage }}
     </p>
@@ -102,7 +104,7 @@ onMounted(loadCountries)
                 class="inline-flex items-center gap-1 font-semibold hover:text-ink"
                 @click="setSort(column.key)"
               >
-                <span>{{ column.label }}</span>
+                <span>{{ i18n.t(column.labelKey) }}</span>
                 <span class="text-[10px] text-ink/45">{{ sortIcon(column.key) }}</span>
               </button>
             </th>

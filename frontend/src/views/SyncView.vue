@@ -2,9 +2,11 @@
 import AppLayout from '@/components/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import StatCard from '@/components/StatCard.vue'
+import { useI18nStore } from '@/stores/i18nStore'
 import { useSyncStore } from '@/stores/syncStore'
 import { formatInteger } from '@/utils/formatters'
 
+const i18n = useI18nStore()
 const syncStore = useSyncStore()
 
 async function syncActivities(mode) {
@@ -15,15 +17,15 @@ async function syncActivities(mode) {
 <template>
   <AppLayout>
     <PageHeader
-      title="Sync"
-      description="Strava에서 러닝 활동을 가져오고 도시/국가 정보를 갱신합니다."
+      :title="i18n.t('sync.title')"
+      :description="i18n.t('sync.description')"
     />
 
     <div class="grid gap-4 lg:grid-cols-2">
       <section class="rounded border border-black/10 bg-white p-5">
-        <h2 class="text-base font-semibold text-ink">최근 활동 동기화</h2>
+        <h2 class="text-base font-semibold text-ink">{{ i18n.t('sync.recentTitle') }}</h2>
         <p class="mt-2 text-sm leading-6 text-ink/60">
-          최신 활동 100개만 확인합니다. 평소에는 이 옵션을 사용하세요.
+          {{ i18n.t('sync.recentDescription') }}
         </p>
         <button
           type="button"
@@ -31,14 +33,14 @@ async function syncActivities(mode) {
           :disabled="syncStore.isSyncing"
           @click="syncActivities('recent')"
         >
-          {{ syncStore.isSyncing ? '동기화 중' : '최근 100개 동기화' }}
+          {{ syncStore.isSyncing ? i18n.t('sync.syncing') : i18n.t('sync.recentButton') }}
         </button>
       </section>
 
       <section class="rounded border border-black/10 bg-white p-5">
-        <h2 class="text-base font-semibold text-ink">전체 기간 동기화</h2>
+        <h2 class="text-base font-semibold text-ink">{{ i18n.t('sync.fullTitle') }}</h2>
         <p class="mt-2 text-sm leading-6 text-ink/60">
-          Strava 활동 페이지를 끝까지 조회합니다. 활동 수와 geocoding 호출 수에 따라 몇 분 이상 걸릴 수 있습니다.
+          {{ i18n.t('sync.fullDescription') }}
         </p>
         <button
           type="button"
@@ -46,7 +48,7 @@ async function syncActivities(mode) {
           :disabled="syncStore.isSyncing"
           @click="syncActivities('full')"
         >
-          {{ syncStore.isSyncing ? '동기화 중' : '전체 기간 동기화' }}
+          {{ syncStore.isSyncing ? i18n.t('sync.syncing') : i18n.t('sync.fullButton') }}
         </button>
       </section>
     </div>
@@ -56,23 +58,23 @@ async function syncActivities(mode) {
     </p>
 
     <div v-if="syncStore.lastResult" class="mt-6 grid gap-4 md:grid-cols-4">
-      <StatCard label="Requested" :value="formatInteger(syncStore.lastResult.requestedCount)" />
-      <StatCard label="Synced" :value="formatInteger(syncStore.lastResult.syncedCount)" />
-      <StatCard label="Geocoded" :value="formatInteger(syncStore.lastResult.geocodedCount)" />
-      <StatCard label="Skipped" :value="formatInteger(syncStore.lastResult.skippedCount)" />
+      <StatCard :label="i18n.t('sync.requested')" :value="formatInteger(syncStore.lastResult.requestedCount)" />
+      <StatCard :label="i18n.t('sync.synced')" :value="formatInteger(syncStore.lastResult.syncedCount)" />
+      <StatCard :label="i18n.t('sync.geocoded')" :value="formatInteger(syncStore.lastResult.geocodedCount)" />
+      <StatCard :label="i18n.t('sync.skipped')" :value="formatInteger(syncStore.lastResult.skippedCount)" />
     </div>
 
     <div v-if="syncStore.lastResult" class="mt-6 rounded border border-black/10 bg-white p-4 text-sm text-ink/70">
       <p>
-        Mode:
+        {{ i18n.t('sync.mode') }}:
         <span class="font-semibold text-ink">{{ syncStore.lastResult.mode }}</span>
       </p>
       <p class="mt-1">
-        Status:
+        {{ i18n.t('sync.status') }}:
         <span class="font-semibold text-ink">{{ syncStore.lastResult.status }}</span>
       </p>
       <p class="mt-1">
-        Rate limit:
+        {{ i18n.t('sync.rateLimit') }}:
         {{ syncStore.lastResult.rateLimitUsage || '-' }} /
         {{ syncStore.lastResult.rateLimitLimit || '-' }}
       </p>

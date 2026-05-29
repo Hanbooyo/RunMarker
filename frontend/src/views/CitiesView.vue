@@ -3,8 +3,10 @@ import { computed, onMounted, ref } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { passportApi } from '@/api/passportApi'
+import { useI18nStore } from '@/stores/i18nStore'
 import { formatDate, formatInteger, formatKm } from '@/utils/formatters'
 
+const i18n = useI18nStore()
 const cities = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
@@ -12,13 +14,13 @@ const sortKey = ref('totalDistanceKm')
 const sortDirection = ref('desc')
 
 const columns = [
-  { key: 'cityName', label: '도시', type: 'text' },
-  { key: 'regionName', label: '지역', type: 'text' },
-  { key: 'countryName', label: '국가', type: 'text' },
-  { key: 'activityCount', label: '활동', type: 'number' },
-  { key: 'totalDistanceKm', label: '거리', type: 'number' },
-  { key: 'firstActivityAt', label: '첫 러닝', type: 'date' },
-  { key: 'lastActivityAt', label: '최근 러닝', type: 'date' },
+  { key: 'cityName', labelKey: 'cities.city', type: 'text' },
+  { key: 'regionName', labelKey: 'cities.region', type: 'text' },
+  { key: 'countryName', labelKey: 'cities.country', type: 'text' },
+  { key: 'activityCount', labelKey: 'cities.activities', type: 'number' },
+  { key: 'totalDistanceKm', labelKey: 'cities.distance', type: 'number' },
+  { key: 'firstActivityAt', labelKey: 'cities.firstRun', type: 'date' },
+  { key: 'lastActivityAt', labelKey: 'cities.latestRun', type: 'date' },
 ]
 
 const sortedCities = computed(() => {
@@ -45,7 +47,7 @@ async function loadCities() {
     const data = await passportApi.getCities()
     cities.value = data.cities || []
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || '도시 목록을 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || i18n.t('cities.loadError')
   } finally {
     isLoading.value = false
   }
@@ -92,9 +94,9 @@ onMounted(loadCities)
 
 <template>
   <AppLayout>
-    <PageHeader title="Cities" description="도시별 러닝 기록을 정렬해서 확인합니다." />
+    <PageHeader :title="i18n.t('cities.title')" :description="i18n.t('cities.description')" />
 
-    <p v-if="isLoading" class="text-sm text-ink/60">불러오는 중입니다.</p>
+    <p v-if="isLoading" class="text-sm text-ink/60">{{ i18n.t('common.loading') }}</p>
     <p v-else-if="errorMessage" class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
       {{ errorMessage }}
     </p>
@@ -109,7 +111,7 @@ onMounted(loadCities)
                 class="inline-flex items-center gap-1 font-semibold hover:text-ink"
                 @click="setSort(column.key)"
               >
-                <span>{{ column.label }}</span>
+                <span>{{ i18n.t(column.labelKey) }}</span>
                 <span class="text-[10px] text-ink/45">{{ sortIcon(column.key) }}</span>
               </button>
             </th>

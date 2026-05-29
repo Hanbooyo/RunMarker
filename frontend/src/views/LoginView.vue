@@ -2,10 +2,12 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useI18nStore } from '@/stores/i18nStore'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const i18n = useI18nStore()
 
 const debugUserIdModel = computed({
   get: () => authStore.debugUserId,
@@ -34,9 +36,9 @@ function continueWithDebugUser() {
       <div class="rounded border border-black/10 bg-white p-6 shadow-sm">
         <div class="mb-8">
           <p class="text-sm font-semibold text-trail">StravaMate</p>
-          <h1 class="mt-2 text-3xl font-semibold text-ink">Running Passport</h1>
+          <h1 class="mt-2 text-3xl font-semibold text-ink">{{ i18n.t('login.title') }}</h1>
           <p class="mt-3 text-sm leading-6 text-ink/65">
-            Strava 러닝 활동을 도시와 국가 단위의 러닝 여권으로 정리합니다.
+            {{ i18n.t('login.description') }}
           </p>
         </div>
 
@@ -46,7 +48,7 @@ function continueWithDebugUser() {
           :disabled="authStore.isLoading"
           @click="authStore.loginWithStrava"
         >
-          Strava로 로그인
+          {{ i18n.t('login.strava') }}
         </button>
 
         <button
@@ -55,7 +57,7 @@ function continueWithDebugUser() {
           :disabled="authStore.isLoading"
           @click="continueWithLocalDevelopmentUser"
         >
-          로컬 개발용 로그인
+          {{ i18n.t('login.local') }}
         </button>
 
         <p v-if="authStore.errorMessage" class="mt-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -64,7 +66,7 @@ function continueWithDebugUser() {
 
         <details class="mt-6 border-t border-black/10 pt-5">
           <summary class="cursor-pointer text-sm font-medium text-ink">
-            기존 Local User ID로 접속
+            {{ i18n.t('login.debug') }}
           </summary>
 
           <div class="mt-3 flex gap-2">
@@ -72,14 +74,14 @@ function continueWithDebugUser() {
               id="debug-user-id"
               v-model="debugUserIdModel"
               class="min-w-0 flex-1 rounded border border-black/15 px-3 py-2 text-sm outline-none focus:border-trail"
-              placeholder="예: 1"
+              :placeholder="i18n.t('login.debugPlaceholder')"
             />
             <button
               type="button"
               class="rounded border border-black/15 px-3 py-2 text-sm font-medium text-ink"
               @click="continueWithDebugUser"
             >
-              이동
+              {{ i18n.t('login.go') }}
             </button>
           </div>
         </details>
