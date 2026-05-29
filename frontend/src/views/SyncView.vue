@@ -11,8 +11,14 @@ const i18n = useI18nStore()
 const syncStore = useSyncStore()
 
 const progressText = computed(() => {
-  if (!syncStore.lastResult || !syncStore.isSyncing) {
+  if (!syncStore.isSyncing) {
     return ''
+  }
+
+  if (!syncStore.lastResult) {
+    return syncStore.activeMode === 'full'
+      ? '전체 동기화 작업을 시작하는 중입니다.'
+      : '최근 활동 정보를 요청하는 중입니다.'
   }
 
   const requested = formatInteger(syncStore.lastResult.requestedCount || 0)
@@ -72,7 +78,9 @@ async function syncActivities(mode) {
     >
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p class="font-medium text-ink/60">전체 동기화 진행 중</p>
+          <p class="font-medium text-ink/60">
+            {{ syncStore.activeMode === 'full' ? '전체 동기화 진행 중' : '최근 동기화 진행 중' }}
+          </p>
           <p class="mt-1">{{ progressText }}</p>
         </div>
         <div class="h-2 w-full overflow-hidden rounded bg-mist sm:w-56">

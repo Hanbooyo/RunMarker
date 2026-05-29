@@ -4,6 +4,7 @@ import { syncApi } from '@/api/syncApi'
 
 export const useSyncStore = defineStore('sync', () => {
   const isSyncing = ref(false)
+  const activeMode = ref('')
   const lastResult = ref(null)
   const errorMessage = ref('')
   const currentJobId = ref(null)
@@ -11,6 +12,7 @@ export const useSyncStore = defineStore('sync', () => {
 
   async function syncActivities(mode = 'recent') {
     isSyncing.value = true
+    activeMode.value = mode
     errorMessage.value = ''
 
     try {
@@ -26,6 +28,7 @@ export const useSyncStore = defineStore('sync', () => {
     } finally {
       if (mode !== 'full') {
         isSyncing.value = false
+        activeMode.value = ''
       }
     }
   }
@@ -59,6 +62,7 @@ export const useSyncStore = defineStore('sync', () => {
       if (status.status !== 'STARTED') {
         stopPolling()
         isSyncing.value = false
+        activeMode.value = ''
         currentJobId.value = null
 
         if (status.status === 'FAILED') {
@@ -68,6 +72,7 @@ export const useSyncStore = defineStore('sync', () => {
     } catch (error) {
       stopPolling()
       isSyncing.value = false
+      activeMode.value = ''
       errorMessage.value = error.response?.data?.message || '동기화 상태 조회에 실패했습니다.'
     }
   }
@@ -81,6 +86,7 @@ export const useSyncStore = defineStore('sync', () => {
 
   return {
     isSyncing,
+    activeMode,
     lastResult,
     errorMessage,
     currentJobId,
