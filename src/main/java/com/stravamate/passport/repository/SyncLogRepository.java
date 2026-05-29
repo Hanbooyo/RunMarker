@@ -37,6 +37,20 @@ public interface SyncLogRepository {
             """)
     Optional<SyncLog> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
 
+    @Select("""
+            SELECT id, user_id, sync_type, mode, status, requested_count, synced_count,
+                   geocoded_count, geocoding_failed_count, skipped_count,
+                   rate_limit_limit, rate_limit_usage, error_message, started_at, finished_at
+            FROM sync_logs
+            WHERE user_id = #{userId}
+              AND mode = #{mode}
+              AND status = 'STARTED'
+              AND started_at > NOW() - INTERVAL '6 hours'
+            ORDER BY started_at DESC
+            LIMIT 1
+            """)
+    Optional<SyncLog> findRunningByUserIdAndMode(@Param("userId") Long userId, @Param("mode") String mode);
+
     @Update("""
             UPDATE sync_logs
             SET requested_count = #{requestedCount},

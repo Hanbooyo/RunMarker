@@ -66,6 +66,12 @@ public class ActivitySyncService {
 
     public SyncJobStartResponse startActivitiesSyncJob(Long userId, String mode) {
         String normalizedMode = normalizeMode(mode);
+        var runningSyncLog = syncLogRepository.findRunningByUserIdAndMode(userId, normalizedMode);
+        if (runningSyncLog.isPresent()) {
+            SyncLog syncLog = runningSyncLog.get();
+            return new SyncJobStartResponse(syncLog.getId(), normalizedMode, syncLog.getStatus());
+        }
+
         SyncLog syncLog = syncLogRepository.insertStarted(userId, normalizedMode);
 
         CompletableFuture.runAsync(() -> runSync(userId, normalizedMode, syncLog), syncTaskExecutor);
