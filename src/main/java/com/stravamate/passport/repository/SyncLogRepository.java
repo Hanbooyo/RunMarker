@@ -15,22 +15,24 @@ public interface SyncLogRepository {
             INSERT INTO sync_logs (
                 user_id, sync_type, mode, status, requested_count, synced_count,
                 geocoded_count, geocoding_failed_count, skipped_count,
-                started_at
+                started_at, progress_updated_at
             )
             VALUES (
                 #{userId}, 'ACTIVITIES', #{mode}, 'STARTED', 0, 0, 0, 0, 0,
-                NOW()
+                NOW(), NOW()
             )
             RETURNING id, user_id, sync_type, status, requested_count, synced_count,
                       geocoded_count, geocoding_failed_count, skipped_count,
-                      rate_limit_limit, rate_limit_usage, error_message, started_at, finished_at, mode
+                      rate_limit_limit, rate_limit_usage, error_message, started_at,
+                      progress_updated_at, finished_at, mode
             """)
     SyncLog insertStarted(@Param("userId") Long userId, @Param("mode") String mode);
 
     @Select("""
             SELECT id, user_id, sync_type, mode, status, requested_count, synced_count,
                    geocoded_count, geocoding_failed_count, skipped_count,
-                   rate_limit_limit, rate_limit_usage, error_message, started_at, finished_at
+                   rate_limit_limit, rate_limit_usage, error_message, started_at,
+                   progress_updated_at, finished_at
             FROM sync_logs
             WHERE id = #{id}
               AND user_id = #{userId}
@@ -40,12 +42,13 @@ public interface SyncLogRepository {
     @Select("""
             SELECT id, user_id, sync_type, mode, status, requested_count, synced_count,
                    geocoded_count, geocoding_failed_count, skipped_count,
-                   rate_limit_limit, rate_limit_usage, error_message, started_at, finished_at
+                   rate_limit_limit, rate_limit_usage, error_message, started_at,
+                   progress_updated_at, finished_at
             FROM sync_logs
             WHERE user_id = #{userId}
               AND mode = #{mode}
               AND status = 'STARTED'
-              AND started_at > NOW() - INTERVAL '6 hours'
+              AND progress_updated_at > NOW() - INTERVAL '2 minutes'
             ORDER BY started_at DESC
             LIMIT 1
             """)
@@ -59,7 +62,8 @@ public interface SyncLogRepository {
                 geocoding_failed_count = #{geocodingFailedCount},
                 skipped_count = #{skippedCount},
                 rate_limit_limit = #{rateLimitLimit},
-                rate_limit_usage = #{rateLimitUsage}
+                rate_limit_usage = #{rateLimitUsage},
+                progress_updated_at = NOW()
             WHERE id = #{id}
             """)
     int updateProgress(
@@ -84,6 +88,7 @@ public interface SyncLogRepository {
                 rate_limit_limit = #{rateLimitLimit},
                 rate_limit_usage = #{rateLimitUsage},
                 error_message = #{errorMessage},
+                progress_updated_at = NOW(),
                 finished_at = NOW()
             WHERE id = #{id}
             """)

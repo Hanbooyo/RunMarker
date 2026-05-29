@@ -17,6 +17,7 @@ public record SyncJobStatusResponse(
         String rateLimitUsage,
         String errorMessage,
         Instant startedAt,
+        Instant progressUpdatedAt,
         Instant finishedAt
 ) {
     public static SyncJobStatusResponse from(SyncLog syncLog) {
@@ -33,6 +34,7 @@ public record SyncJobStatusResponse(
                 syncLog.getRateLimitUsage(),
                 syncLog.getErrorMessage(),
                 syncLog.getStartedAt(),
+                syncLog.getProgressUpdatedAt(),
                 syncLog.getFinishedAt()
         );
     }

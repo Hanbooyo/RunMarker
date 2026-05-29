@@ -18,6 +18,7 @@ public class SyncLog {
     private String rateLimitUsage;
     private String errorMessage;
     private Instant startedAt;
+    private Instant progressUpdatedAt;
     private Instant finishedAt;
 
     public Long getId() {
@@ -130,6 +131,14 @@ public class SyncLog {
 
     public void setStartedAt(Instant startedAt) {
         this.startedAt = startedAt;
+    }
+
+    public Instant getProgressUpdatedAt() {
+        return progressUpdatedAt;
+    }
+
+    public void setProgressUpdatedAt(Instant progressUpdatedAt) {
+        this.progressUpdatedAt = progressUpdatedAt;
     }
 
     public Instant getFinishedAt() {

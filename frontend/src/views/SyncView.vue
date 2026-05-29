@@ -28,6 +28,10 @@ const progressText = computed(() => {
   return `${requested}건의 Activities 정보를 받아왔습니다. 저장 ${synced}건, 위치 변환 ${geocoded}건`
 })
 
+const activeSyncLabel = computed(() => (
+  syncStore.activeMode === 'full' ? '전체 동기화 진행 중' : '최근 동기화 진행 중'
+))
+
 async function syncActivities(mode) {
   await syncStore.syncActivities(mode)
 }
@@ -77,14 +81,20 @@ async function syncActivities(mode) {
       class="mt-5 rounded border border-trail/20 bg-white/60 p-4 text-sm text-ink/50 shadow-sm"
     >
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+        <div class="flex min-w-0 items-start gap-3">
+          <div
+            class="mt-0.5 h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-trail/25 border-t-trail"
+            aria-hidden="true"
+          ></div>
+          <div class="min-w-0">
           <p class="font-medium text-ink/60">
-            {{ syncStore.activeMode === 'full' ? '전체 동기화 진행 중' : '최근 동기화 진행 중' }}
+            {{ activeSyncLabel }}
           </p>
           <p class="mt-1">{{ progressText }}</p>
+          </div>
         </div>
         <div class="h-2 w-full overflow-hidden rounded bg-mist sm:w-56">
-          <div class="h-full w-2/3 animate-pulse rounded bg-trail/40"></div>
+          <div class="h-full w-1/2 animate-pulse rounded bg-trail/40"></div>
         </div>
       </div>
     </div>
@@ -114,7 +124,6 @@ async function syncActivities(mode) {
         {{ syncStore.lastResult.rateLimitUsage || '-' }} /
         {{ syncStore.lastResult.rateLimitLimit || '-' }}
       </p>
-      <pre class="mt-4 max-w-full overflow-x-auto rounded bg-mist p-3 text-xs">{{ syncStore.lastResult }}</pre>
     </div>
   </AppLayout>
 </template>
