@@ -32,6 +32,25 @@ const activeSyncLabel = computed(() => (
   syncStore.activeMode === 'full' ? '전체 동기화 진행 중' : '최근 동기화 진행 중'
 ))
 
+const statDescriptions = [
+  {
+    labelKey: 'sync.requested',
+    text: 'Strava API에서 읽어온 전체 활동 수입니다. Run이 아닌 활동도 포함됩니다.',
+  },
+  {
+    labelKey: 'sync.synced',
+    text: '새로 저장된 Run 활동 수입니다. 이미 저장된 활동은 제외됩니다.',
+  },
+  {
+    labelKey: 'sync.geocoded',
+    text: '시작 좌표를 도시/국가 정보로 변환한 활동 수입니다.',
+  },
+  {
+    labelKey: 'sync.skipped',
+    text: 'Run이 아니거나 좌표가 없거나 이미 저장되어 건너뛴 활동 수입니다.',
+  },
+]
+
 async function syncActivities(mode) {
   await syncStore.syncActivities(mode)
 }
@@ -64,6 +83,9 @@ async function syncActivities(mode) {
         <h2 class="text-base font-semibold text-ink">{{ i18n.t('sync.fullTitle') }}</h2>
         <p class="mt-2 text-sm leading-6 text-ink/60">
           {{ i18n.t('sync.fullDescription') }}
+        </p>
+        <p class="mt-3 rounded bg-mist px-3 py-2 text-xs leading-5 text-ink/60">
+          전체 동기화는 활동 수와 위치 변환량에 따라 오래 걸릴 수 있습니다. 화면을 켜둔 상태에서 진행 상황을 확인해 주세요.
         </p>
         <button
           type="button"
@@ -109,6 +131,22 @@ async function syncActivities(mode) {
       <StatCard :label="i18n.t('sync.geocoded')" :value="formatInteger(syncStore.lastResult.geocodedCount)" />
       <StatCard :label="i18n.t('sync.skipped')" :value="formatInteger(syncStore.lastResult.skippedCount)" />
     </div>
+
+    <section v-if="syncStore.lastResult" class="mt-4 rounded border border-black/10 bg-white p-4">
+      <h2 class="text-sm font-semibold text-ink">동기화 값 설명</h2>
+      <dl class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <div
+          v-for="item in statDescriptions"
+          :key="item.labelKey"
+          class="rounded bg-mist px-3 py-2"
+        >
+          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">
+            {{ i18n.t(item.labelKey) }}
+          </dt>
+          <dd class="mt-1 leading-5 text-ink/70">{{ item.text }}</dd>
+        </div>
+      </dl>
+    </section>
 
     <div v-if="syncStore.lastResult" class="mt-6 rounded border border-black/10 bg-white p-4 text-sm text-ink/70">
       <p>
