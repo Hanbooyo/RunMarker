@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => Boolean(user.value || debugUserId.value))
 
-  function loginWithStrava() {
+  function loginWithActivityProvider() {
     window.location.href = authApi.getLoginUrl()
   }
 
@@ -90,7 +90,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     errorMessage,
     isAuthenticated,
-    loginWithStrava,
+    loginWithActivityProvider,
     loginForLocalDevelopment,
     setDebugUserId,
     fetchMe,

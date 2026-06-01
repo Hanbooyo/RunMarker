@@ -43,7 +43,7 @@ public class StravaActivitiesClient {
                     response.getHeaders().getFirst("X-RateLimit-Usage")
             );
         } catch (Exception exception) {
-            throw new StravaApiException("Strava 활동 목록 조회에 실패했습니다.", exception);
+            throw new StravaApiException("활동 목록 조회에 실패했습니다.", exception);
         }
     }
 

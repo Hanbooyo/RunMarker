@@ -7,11 +7,11 @@ const route = useRoute()
 const message = computed(() => {
   switch (route.query.error) {
     case 'missing_strava_config':
-      return 'Strava Client ID와 Client Secret이 설정되지 않았습니다.'
+      return '활동 계정 연동 설정이 완료되지 않았습니다.'
     case 'strava_denied':
-      return 'Strava 권한 승인이 취소되었습니다.'
+      return '활동 계정 권한 승인이 취소되었습니다.'
     case 'auth_failed':
-      return 'Strava 로그인 처리 중 오류가 발생했습니다.'
+      return '활동 계정 로그인 처리 중 오류가 발생했습니다.'
     default:
       return '로그인에 실패했습니다.'
   }

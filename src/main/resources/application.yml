@@ -50,7 +50,7 @@ app:
   geocoding:
     provider: ${GEOCODING_PROVIDER:nominatim}
     nominatim-base-url: ${NOMINATIM_BASE_URL:https://nominatim.openstreetmap.org}
-    nominatim-user-agent: ${NOMINATIM_USER_AGENT:StravaMatePassport/0.1 local}
+    nominatim-user-agent: ${NOMINATIM_USER_AGENT:RunMarker/0.1 local}
     cache-coordinate-scale: ${GEOCODING_CACHE_COORDINATE_SCALE:3}
 
 logging:

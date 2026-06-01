@@ -97,7 +97,7 @@ $env:STRAVA_CLIENT_SECRET="your-strava-client-secret"
 $env:STRAVA_REDIRECT_URI="http://localhost:8080/api/auth/strava/callback"
 $env:FRONTEND_BASE_URL="http://localhost:5173"
 $env:CORS_ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
-$env:NOMINATIM_USER_AGENT="StravaMatePassport/0.1 local"
+$env:NOMINATIM_USER_AGENT="RunMarker/0.1 local"
 
 .\gradlew.bat bootRun
 ```

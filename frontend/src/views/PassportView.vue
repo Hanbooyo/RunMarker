@@ -40,7 +40,7 @@ async function loadPassport() {
     cities.value = citiesData.cities || summaryData.cities || []
     recentPlaces.value = recentData.places || []
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'Running Passport 데이터를 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || 'RunMarker 데이터를 불러오지 못했습니다.'
   } finally {
     isLoading.value = false
   }
@@ -63,8 +63,8 @@ onMounted(loadPassport)
   <AppLayout>
     <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <PageHeader
-        title="Running Passport"
-        description="Strava 러닝 활동을 국가와 도시 단위의 여권 스탬프로 정리합니다."
+        title="RunMarker"
+        description="러닝 활동을 국가와 도시 단위의 여권 스탬프로 정리합니다."
       />
 
       <button
@@ -73,7 +73,7 @@ onMounted(loadPassport)
         :disabled="syncStore.isSyncing"
         @click="syncAndReload"
       >
-        {{ syncStore.isSyncing ? '동기화 중' : 'Strava 동기화' }}
+        {{ syncStore.isSyncing ? '동기화 중' : '활동 동기화' }}
       </button>
     </div>
 

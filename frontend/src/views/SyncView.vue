@@ -35,7 +35,7 @@ const activeSyncLabel = computed(() => (
 const statDescriptions = [
   {
     labelKey: 'sync.requested',
-    text: 'Strava API에서 읽어온 전체 활동 수입니다. Run이 아닌 활동도 포함됩니다.',
+    text: '연결된 활동 계정에서 읽어온 전체 활동 수입니다. Run이 아닌 활동도 포함됩니다.',
   },
   {
     labelKey: 'sync.synced',

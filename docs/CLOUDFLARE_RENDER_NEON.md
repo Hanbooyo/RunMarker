@@ -44,7 +44,7 @@ TOKEN_CIPHER=aes-gcm
 TOKEN_ENCRYPTION_KEY=...
 DEV_AUTH_ENABLED=false
 DEBUG_USER_HEADER_ENABLED=false
-NOMINATIM_USER_AGENT=StravaMatePassport/0.1 demo contact@example.com
+NOMINATIM_USER_AGENT=RunMarker/0.1 demo contact@example.com
 ```
 
 `TOKEN_ENCRYPTION_KEY` 생성 예:

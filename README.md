@@ -1,4 +1,4 @@
-# StravaMate - Running Passport
+# RunMarker
 
 Strava OAuth로 로그인한 사용자의 러닝 활동을 가져와, 시작 좌표 기준으로 달린 도시/국가를 기록하는 웹앱입니다.
 
@@ -55,7 +55,7 @@ java -version
 
 VS Code에서 실행:
 
-1. `F:\workspace\StravaMate_Passport` 폴더를 엽니다.
+1. 프로젝트 폴더를 엽니다.
 2. 추천 확장 설치 알림이 뜨면 설치합니다.
 3. `Ctrl+Shift+P`를 누릅니다.
 4. `Tasks: Run Task`를 선택합니다.
@@ -96,7 +96,7 @@ STRAVA_CLIENT_SECRET=your-client-secret
 STRAVA_REDIRECT_URI=http://localhost:8080/api/auth/strava/callback
 FRONTEND_BASE_URL=http://localhost:5173
 CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-NOMINATIM_USER_AGENT=StravaMatePassport/0.1 local
+NOMINATIM_USER_AGENT=RunMarker/0.1 local
 ```
 
 주요 API:
@@ -191,7 +191,7 @@ http://127.0.0.1:5173/passport
 
 demo mode에서는 다음 데이터가 mock으로 표시됩니다.
 
-- Running Passport 요약
+- Run Passport 요약
 - 국가/도시 스탬프
 - Leaflet 지도 마커
 - 최근 방문 도시

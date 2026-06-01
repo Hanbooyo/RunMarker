@@ -37,7 +37,7 @@ function continueWithDebugUser() {
     <section class="mx-auto grid w-full max-w-md content-center">
       <div class="rounded border border-black/10 bg-white p-6 shadow-sm">
         <div class="mb-8">
-          <p class="text-sm font-semibold text-trail">StravaMate</p>
+          <p class="text-sm font-semibold text-trail">RunMarker</p>
           <h1 class="mt-2 text-3xl font-semibold text-ink">{{ i18n.t('login.title') }}</h1>
           <p class="mt-3 text-sm leading-6 text-ink/65">
             {{ i18n.t('login.description') }}
@@ -48,7 +48,7 @@ function continueWithDebugUser() {
           type="button"
           class="w-full rounded bg-trail px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
           :disabled="authStore.isLoading"
-          @click="authStore.loginWithStrava"
+          @click="authStore.loginWithActivityProvider"
         >
           {{ i18n.t('login.strava') }}
         </button>

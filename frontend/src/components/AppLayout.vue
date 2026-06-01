@@ -69,8 +69,8 @@ onBeforeUnmount(() => {
               class="h-9 w-9 shrink-0 rounded object-cover"
             />
             <div class="min-w-0">
-              <p class="truncate text-sm font-semibold text-ink">StravaMate</p>
-              <p class="truncate text-xs text-ink/60">Running Passport</p>
+              <p class="truncate text-sm font-semibold text-ink">RunMarker</p>
+              <p class="truncate text-xs text-ink/60">Run Passport</p>
             </div>
           </RouterLink>
 

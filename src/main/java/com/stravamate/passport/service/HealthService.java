@@ -9,6 +9,6 @@ import java.time.Instant;
 public class HealthService {
 
     public HealthResponse getHealth() {
-        return new HealthResponse("UP", "stravamate-passport", Instant.now());
+        return new HealthResponse("UP", "runmarker-api", Instant.now());
     }
 }

@@ -29,7 +29,7 @@ onMounted(loadActivities)
 
 <template>
   <AppLayout>
-    <PageHeader title="Activities" description="저장된 Strava 러닝 활동 목록입니다." />
+    <PageHeader title="Activities" description="저장된 러닝 활동 목록입니다." />
 
     <p v-if="isLoading" class="text-sm text-ink/60">불러오는 중입니다.</p>
     <p v-else-if="errorMessage" class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">

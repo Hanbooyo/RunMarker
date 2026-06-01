@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-const STORAGE_KEY = 'stravamate.locale'
+const STORAGE_KEY = 'runmarker.locale'
 
 const messages = {
   ko: {
@@ -23,10 +23,10 @@ const messages = {
       english: 'English',
     },
     login: {
-      title: 'Running Passport',
-      description: 'Strava 러닝 활동을 도시와 국가 단위의 러닝 여권으로 정리합니다.',
-      strava: 'Strava로 로그인',
-      local: '로컬 개발용 로그인',
+      title: 'RunMarker',
+      description: '러닝 활동을 도시와 국가 단위의 러닝 여권으로 정리합니다.',
+      strava: '활동 계정 연결',
+      local: '로컬 개발 로그인',
       debug: '기존 Local User ID로 접속',
       debugPlaceholder: '예: 1',
       go: '이동',
@@ -56,18 +56,18 @@ const messages = {
     },
     sync: {
       title: '동기화',
-      description: 'Strava에서 러닝 활동을 가져오고 도시/국가 정보를 갱신합니다.',
+      description: '러닝 활동을 가져오고 도시/국가 정보를 갱신합니다.',
       recentTitle: '최근 활동 동기화',
       recentDescription: '최신 활동 100개만 확인합니다. 평소에는 이 옵션을 사용하세요.',
       recentButton: '최근 100개 동기화',
       fullTitle: '전체 기간 동기화',
-      fullDescription: 'Strava 활동 페이지를 끝까지 조회합니다. 활동 수와 geocoding 호출 수에 따라 몇 분 이상 걸릴 수 있습니다.',
+      fullDescription: '활동 페이지를 끝까지 조회합니다. 활동 수와 위치 변환 호출 수에 따라 몇 분 이상 걸릴 수 있습니다.',
       fullButton: '전체 기간 동기화',
       syncing: '동기화 중',
       requested: '요청',
       synced: '저장',
       geocoded: '위치 변환',
-      skipped: '스킵',
+      skipped: '건너뜀',
       mode: '모드',
       status: '상태',
       rateLimit: 'Rate limit',
@@ -92,9 +92,9 @@ const messages = {
       english: 'English',
     },
     login: {
-      title: 'Running Passport',
-      description: 'Organize your Strava runs into a running passport by city and country.',
-      strava: 'Log in with Strava',
+      title: 'RunMarker',
+      description: 'Organize your runs into a running passport by city and country.',
+      strava: 'Connect activity account',
       local: 'Local development login',
       debug: 'Use existing Local User ID',
       debugPlaceholder: 'e.g. 1',
@@ -125,12 +125,12 @@ const messages = {
     },
     sync: {
       title: 'Sync',
-      description: 'Import Strava runs and update city/country information.',
+      description: 'Import runs and update city/country information.',
       recentTitle: 'Recent Sync',
       recentDescription: 'Checks the latest 100 activities. Use this for normal updates.',
       recentButton: 'Sync latest 100',
       fullTitle: 'Full History Sync',
-      fullDescription: 'Reads Strava activity pages until the end. This can take several minutes depending on activity and geocoding volume.',
+      fullDescription: 'Reads activity pages until the end. This can take several minutes depending on activity and geocoding volume.',
       fullButton: 'Sync full history',
       syncing: 'Syncing',
       requested: 'Requested',
@@ -149,13 +149,14 @@ function resolvePath(source, path) {
 }
 
 export const useI18nStore = defineStore('i18n', () => {
-  const locale = ref(localStorage.getItem(STORAGE_KEY) || 'ko')
+  const locale = ref(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stravamate.locale') || 'ko')
 
   const currentLocaleLabel = computed(() => messages[locale.value]?.common?.[locale.value === 'ko' ? 'korean' : 'english'])
 
   function setLocale(value) {
     locale.value = value === 'en' ? 'en' : 'ko'
     localStorage.setItem(STORAGE_KEY, locale.value)
+    localStorage.removeItem('stravamate.locale')
   }
 
   function toggleLocale() {

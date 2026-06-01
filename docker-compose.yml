@@ -40,7 +40,7 @@ services:
       STRAVA_REDIRECT_URI: ${STRAVA_REDIRECT_URI:-http://localhost:8080/api/auth/strava/callback}
       GEOCODING_PROVIDER: ${GEOCODING_PROVIDER:-nominatim}
       NOMINATIM_BASE_URL: ${NOMINATIM_BASE_URL:-https://nominatim.openstreetmap.org}
-      NOMINATIM_USER_AGENT: ${NOMINATIM_USER_AGENT:-StravaMatePassport/0.1 docker-local}
+      NOMINATIM_USER_AGENT: ${NOMINATIM_USER_AGENT:-RunMarker/0.1 docker-local}
       GEOCODING_CACHE_COORDINATE_SCALE: ${GEOCODING_CACHE_COORDINATE_SCALE:-3}
     ports:
       - "8080:8080"

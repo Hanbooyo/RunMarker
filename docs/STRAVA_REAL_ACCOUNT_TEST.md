@@ -32,7 +32,7 @@ STRAVA_CLIENT_SECRET=your-client-secret
 STRAVA_REDIRECT_URI=http://localhost:8080/api/auth/strava/callback
 FRONTEND_BASE_URL=http://localhost:5173
 CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-NOMINATIM_USER_AGENT=StravaMatePassport/0.1 local
+NOMINATIM_USER_AGENT=RunMarker/0.1 local
 SESSION_TIMEOUT=60m
 ```
 
