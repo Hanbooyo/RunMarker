@@ -36,8 +36,8 @@ onMounted(loadActivities)
       {{ errorMessage }}
     </p>
 
-    <div class="overflow-hidden rounded border border-black/10 bg-white">
-      <table class="w-full min-w-[860px] text-left text-sm">
+    <div class="overflow-x-auto rounded border border-black/10 bg-white">
+      <table class="min-w-[860px] text-left text-sm">
         <thead class="bg-mist text-xs uppercase text-ink/55">
           <tr>
             <th class="px-4 py-3">활동</th>

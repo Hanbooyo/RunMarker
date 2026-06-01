@@ -139,7 +139,7 @@ onBeforeUnmount(() => {
       </nav>
     </header>
 
-    <main class="mx-auto max-w-7xl px-4 py-5 sm:px-5 sm:py-6">
+    <main class="mx-auto min-w-0 max-w-7xl px-4 py-5 sm:px-5 sm:py-6">
       <slot />
     </main>
   </div>

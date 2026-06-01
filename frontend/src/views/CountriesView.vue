@@ -94,8 +94,8 @@ onMounted(loadCountries)
       {{ errorMessage }}
     </p>
 
-    <div v-else class="overflow-hidden rounded border border-black/10 bg-white">
-      <table class="w-full min-w-[760px] text-left text-sm">
+    <div v-else class="overflow-x-auto rounded border border-black/10 bg-white">
+      <table class="min-w-[760px] text-left text-sm">
         <thead class="bg-mist text-xs uppercase text-ink/55">
           <tr>
             <th v-for="column in columns" :key="column.key" class="px-4 py-3">
