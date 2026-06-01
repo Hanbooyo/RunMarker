@@ -29,6 +29,23 @@
         </section>
 
         <section>
+          <h2 class="font-semibold text-ink">Data Access</h2>
+          <p class="mt-1">
+            Each user can view only their own imported data through their authenticated session.
+            RunMarker does not provide public profiles, shared leaderboards, or access to another user's activities.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-semibold text-ink">Requested Permissions</h2>
+          <p class="mt-1">
+            The service may request permission to read the user's activity history so it can import older running
+            activities and build complete city/country markers. This permission is used for read-only import and
+            summary display. RunMarker does not create, edit, delete, like, comment on, or follow activities.
+          </p>
+        </section>
+
+        <section>
           <h2 class="font-semibold text-ink">Tokens and Browser Storage</h2>
           <p class="mt-1">
             Access and refresh tokens are stored only on the backend and are not exposed to the browser.
@@ -45,10 +62,21 @@
         </section>
 
         <section>
+          <h2 class="font-semibold text-ink">Deletion and Revocation</h2>
+          <p class="mt-1">
+            Users can delete stored RunMarker data from the Data Deletion page while signed in. Users can also revoke
+            app access from their connected activity account settings; revocation stops future imports but does not
+            automatically delete data already stored in RunMarker.
+          </p>
+        </section>
+
+        <section>
           <h2 class="font-semibold text-ink">Contact</h2>
           <p class="mt-1">
-            For privacy or deletion requests, contact the project owner through the published support channel
-            or repository.
+            For privacy or deletion requests, contact the project owner through
+            <a class="font-medium text-trail underline" href="https://github.com/Hanbooyo/RunMarker/issues" target="_blank" rel="noreferrer">
+              GitHub Issues
+            </a>.
           </p>
         </section>
       </div>

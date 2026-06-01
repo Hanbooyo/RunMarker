@@ -1,6 +1,7 @@
 package com.stravamate.passport.repository;
 
 import com.stravamate.passport.domain.entity.User;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -54,4 +55,10 @@ public interface UserRepository {
             WHERE id = #{userId}
             """)
     int updateLastSyncedAt(Long userId);
+
+    @Delete("""
+            DELETE FROM users
+            WHERE id = #{userId}
+            """)
+    int deleteById(Long userId);
 }

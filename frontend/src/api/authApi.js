@@ -23,6 +23,14 @@ export const authApi = {
     await http.post('/api/auth/logout')
   },
 
+  async deleteAccount() {
+    if (isDemoMode) {
+      return
+    }
+
+    await http.delete('/api/account')
+  },
+
   async getSession() {
     if (isDemoMode) {
       return {

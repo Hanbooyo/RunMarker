@@ -53,6 +53,11 @@ function continueWithDebugUser() {
           {{ i18n.t('login.strava') }}
         </button>
 
+        <div class="mt-4 rounded border border-black/10 bg-mist px-4 py-3 text-xs leading-5 text-ink/60">
+          RunMarker imports your own activity metadata, dates, distance, and start coordinates to create private
+          city/country markers. It is read-only and does not post, edit, like, comment, follow, or modify activities.
+        </div>
+
         <button
           v-if="localDevAuthEnabled"
           type="button"

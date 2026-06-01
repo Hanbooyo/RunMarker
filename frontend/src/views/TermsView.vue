@@ -18,6 +18,14 @@
         </section>
 
         <section>
+          <h2 class="font-semibold text-ink">User Data</h2>
+          <p class="mt-1">
+            You may connect only accounts and activities that you are authorized to access. You are responsible for
+            revoking access from your activity account provider if you no longer want RunMarker authorized there.
+          </p>
+        </section>
+
+        <section>
           <h2 class="font-semibold text-ink">Prohibited Use</h2>
           <p class="mt-1">
             You may not use this service for scraping, social automation, automated kudos, likes, comments,
@@ -37,6 +45,14 @@
           <p class="mt-1">
             The service depends on external APIs, hosting, database, and geocoding providers. Their limits and
             terms may affect availability.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-semibold text-ink">Data Deletion</h2>
+          <p class="mt-1">
+            Signed-in users can request deletion directly from the Data Deletion page. Deleted RunMarker records
+            cannot be restored from this service.
           </p>
         </section>
       </div>

@@ -83,6 +83,23 @@ export const useAuthStore = defineStore('auth', () => {
     setDebugUserId('')
   }
 
+  async function deleteAccount() {
+    isLoading.value = true
+    errorMessage.value = ''
+
+    try {
+      await authApi.deleteAccount()
+      user.value = null
+      session.value = null
+      setDebugUserId('')
+    } catch (error) {
+      errorMessage.value = error.response?.data?.message || 'Account deletion failed.'
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     user,
     debugUserId,
@@ -97,5 +114,6 @@ export const useAuthStore = defineStore('auth', () => {
     fetchSession,
     refreshSession,
     logoutLocal,
+    deleteAccount,
   }
 })
