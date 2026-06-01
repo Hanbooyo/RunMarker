@@ -3,6 +3,9 @@ import { useAuthStore } from '@/stores/authStore'
 import LoginView from '@/views/LoginView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import PassportView from '@/views/PassportView.vue'
+import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
+import TermsView from '@/views/TermsView.vue'
+import DataDeletionView from '@/views/DataDeletionView.vue'
 import CountriesView from '@/views/CountriesView.vue'
 import CitiesView from '@/views/CitiesView.vue'
 import ActivitiesView from '@/views/ActivitiesView.vue'
@@ -39,8 +42,30 @@ const routes = [
   },
   {
     path: '/passport',
-    name: 'passport',
+    redirect: '/markers',
+  },
+  {
+    path: '/markers',
+    name: 'markers',
     component: PassportView,
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: PrivacyPolicyView,
+    meta: { public: true },
+  },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: TermsView,
+    meta: { public: true },
+  },
+  {
+    path: '/data-deletion',
+    name: 'data-deletion',
+    component: DataDeletionView,
+    meta: { public: true },
   },
   {
     path: '/countries',

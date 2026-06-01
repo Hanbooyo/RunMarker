@@ -12,7 +12,7 @@ let timerId = null
 
 const navItems = [
   { to: '/dashboard', labelKey: 'nav.dashboard' },
-  { to: '/passport', labelKey: 'nav.passport' },
+  { to: '/markers', labelKey: 'nav.passport' },
   { to: '/countries', labelKey: 'nav.countries' },
   { to: '/cities', labelKey: 'nav.cities' },
   { to: '/activities', labelKey: 'nav.activities' },
@@ -70,7 +70,7 @@ onBeforeUnmount(() => {
             />
             <div class="min-w-0">
               <p class="truncate text-sm font-semibold text-ink">RunMarker</p>
-              <p class="truncate text-xs text-ink/60">Run Passport</p>
+              <p class="truncate text-xs text-ink/60">Run Markers</p>
             </div>
           </RouterLink>
 
@@ -142,5 +142,12 @@ onBeforeUnmount(() => {
     <main class="mx-auto min-w-0 max-w-7xl px-4 py-5 sm:px-5 sm:py-6">
       <slot />
     </main>
+
+    <footer class="mx-auto flex max-w-7xl flex-wrap gap-3 px-4 pb-6 text-xs text-ink/50 sm:px-5">
+      <RouterLink to="/privacy" class="hover:text-ink">Privacy</RouterLink>
+      <RouterLink to="/terms" class="hover:text-ink">Terms</RouterLink>
+      <RouterLink to="/data-deletion" class="hover:text-ink">Data deletion</RouterLink>
+      <span>Not affiliated with or endorsed by Strava.</span>
+    </footer>
   </div>
 </template>

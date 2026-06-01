@@ -88,6 +88,15 @@ function continueWithDebugUser() {
             </button>
           </div>
         </details>
+
+        <div class="mt-6 flex flex-wrap gap-3 border-t border-black/10 pt-4 text-xs text-ink/50">
+          <RouterLink to="/privacy" class="hover:text-ink">Privacy</RouterLink>
+          <RouterLink to="/terms" class="hover:text-ink">Terms</RouterLink>
+          <RouterLink to="/data-deletion" class="hover:text-ink">Data deletion</RouterLink>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-ink/45">
+          Not affiliated with or endorsed by Strava.
+        </p>
       </div>
     </section>
   </main>

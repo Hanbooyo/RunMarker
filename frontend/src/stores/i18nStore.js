@@ -7,7 +7,7 @@ const messages = {
   ko: {
     nav: {
       dashboard: '대시보드',
-      passport: '여권',
+      passport: '마커',
       countries: '국가',
       cities: '도시',
       activities: '활동',
@@ -24,7 +24,7 @@ const messages = {
     },
     login: {
       title: 'RunMarker',
-      description: '러닝 활동을 도시와 국가 단위의 러닝 여권으로 정리합니다.',
+      description: '러닝 활동을 도시와 국가 단위의 마커로 정리합니다.',
       strava: '활동 계정 연결',
       local: '로컬 개발 로그인',
       debug: '기존 Local User ID로 접속',
@@ -76,7 +76,7 @@ const messages = {
   en: {
     nav: {
       dashboard: 'Dashboard',
-      passport: 'Passport',
+      passport: 'Markers',
       countries: 'Countries',
       cities: 'Cities',
       activities: 'Activities',
@@ -93,7 +93,7 @@ const messages = {
     },
     login: {
       title: 'RunMarker',
-      description: 'Organize your runs into a running passport by city and country.',
+      description: 'Organize your runs into city and country markers.',
       strava: 'Connect activity account',
       local: 'Local development login',
       debug: 'Use existing Local User ID',

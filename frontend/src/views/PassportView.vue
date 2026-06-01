@@ -64,7 +64,7 @@ onMounted(loadPassport)
     <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <PageHeader
         title="RunMarker"
-        description="러닝 활동을 국가와 도시 단위의 여권 스탬프로 정리합니다."
+        description="러닝 활동을 국가와 도시 단위의 마커와 스탬프로 정리합니다."
       />
 
       <button
@@ -164,7 +164,7 @@ onMounted(loadPassport)
         <div class="mb-4 flex items-end justify-between gap-3">
           <div>
             <h2 class="text-lg font-semibold text-ink">도시 스탬프</h2>
-            <p class="mt-1 text-sm text-ink/60">도시별 러닝 여권 스탬프입니다.</p>
+            <p class="mt-1 text-sm text-ink/60">도시별 러닝 마커입니다.</p>
           </div>
           <p class="text-sm text-ink/50">{{ cities.length }} cities</p>
         </div>

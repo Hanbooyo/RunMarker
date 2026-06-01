@@ -28,7 +28,7 @@ onMounted(loadSummary)
 
 <template>
   <AppLayout>
-    <PageHeader title="Dashboard" description="러닝 여권의 전체 진행 상황을 확인합니다." />
+    <PageHeader title="Dashboard" description="러닝 마커의 전체 진행 상황을 확인합니다." />
 
     <p v-if="isLoading" class="text-sm text-ink/60">불러오는 중입니다.</p>
     <p v-else-if="errorMessage" class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
