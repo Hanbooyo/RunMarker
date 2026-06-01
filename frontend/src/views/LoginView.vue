@@ -46,7 +46,7 @@ function continueWithDebugUser() {
 
         <button
           type="button"
-          class="w-full rounded bg-trail px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+          class="w-full rounded bg-[#fc4c02] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#e34402] disabled:cursor-not-allowed disabled:opacity-60"
           :disabled="authStore.isLoading"
           @click="authStore.loginWithActivityProvider"
         >

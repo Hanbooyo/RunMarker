@@ -56,6 +56,7 @@ public class SecurityConfig {
                                 "/api/auth/session/refresh",
                                 "/api/auth/dev/**",
                                 "/api/auth/strava/**",
+                                "/api/account/**",
                                 "/api/sync/**",
                                 "/api/activities/**",
                                 "/api/passport/**"

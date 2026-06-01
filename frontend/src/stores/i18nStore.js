@@ -25,7 +25,7 @@ const messages = {
     login: {
       title: 'RunMarker',
       description: '러닝 활동을 도시와 국가 단위의 마커로 정리합니다.',
-      strava: '활동 계정 연결',
+      strava: 'Connect with Strava',
       local: '로컬 개발 로그인',
       debug: '기존 Local User ID로 접속',
       debugPlaceholder: '예: 1',
@@ -57,14 +57,15 @@ const messages = {
     sync: {
       title: '동기화',
       description: '러닝 활동을 가져오고 도시/국가 정보를 갱신합니다.',
-      recentTitle: '최근 활동 동기화',
+      recentTitle: '최근 동기화',
       recentDescription: '최신 활동 100개만 확인합니다. 평소에는 이 옵션을 사용하세요.',
       recentButton: '최근 100개 동기화',
       fullTitle: '전체 기간 동기화',
-      fullDescription: '활동 페이지를 끝까지 조회합니다. 활동 수와 위치 변환 호출 수에 따라 몇 분 이상 걸릴 수 있습니다.',
+      fullDescription:
+        '활동 페이지를 끝까지 조회합니다. 활동 수와 위치 변환 호출 수에 따라 몇 분 이상 걸릴 수 있습니다.',
       fullButton: '전체 기간 동기화',
       syncing: '동기화 중',
-      requested: '요청',
+      requested: '조회',
       synced: '저장',
       geocoded: '위치 변환',
       skipped: '건너뜀',
@@ -94,7 +95,7 @@ const messages = {
     login: {
       title: 'RunMarker',
       description: 'Organize your runs into city and country markers.',
-      strava: 'Connect activity account',
+      strava: 'Connect with Strava',
       local: 'Local development login',
       debug: 'Use existing Local User ID',
       debugPlaceholder: 'e.g. 1',
@@ -130,7 +131,8 @@ const messages = {
       recentDescription: 'Checks the latest 100 activities. Use this for normal updates.',
       recentButton: 'Sync latest 100',
       fullTitle: 'Full History Sync',
-      fullDescription: 'Reads activity pages until the end. This can take several minutes depending on activity and geocoding volume.',
+      fullDescription:
+        'Reads activity pages until the end. This can take several minutes depending on activity and geocoding volume.',
       fullButton: 'Sync full history',
       syncing: 'Syncing',
       requested: 'Requested',
