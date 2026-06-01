@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
       setDebugUserId('')
     } catch (error) {
       user.value = null
-      errorMessage.value = error.response?.data?.message || '로컬 로그인에 실패했습니다.'
+      errorMessage.value = error.response?.data?.message || 'Local login failed.'
       throw error
     } finally {
       isLoading.value = false
@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await authApi.logout()
     } catch {
-      // 로컬 상태 정리는 백엔드 로그아웃 실패와 무관하게 수행합니다.
+      // Always clear local state even if the backend logout request fails.
     }
 
     user.value = null

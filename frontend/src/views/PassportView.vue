@@ -40,7 +40,7 @@ async function loadPassport() {
     cities.value = citiesData.cities || summaryData.cities || []
     recentPlaces.value = recentData.places || []
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'RunMarker 데이터를 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || 'Failed to load RunMarker data.'
   } finally {
     isLoading.value = false
   }
@@ -52,7 +52,7 @@ async function syncAndReload() {
     await loadPassport()
     await passportMapRef.value?.reloadMarkers()
   } catch {
-    // syncStore가 화면에 표시할 오류 메시지를 관리합니다.
+    // Error state is rendered from the sync store.
   }
 }
 
@@ -64,7 +64,7 @@ onMounted(loadPassport)
     <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <PageHeader
         title="RunMarker"
-        description="러닝 활동을 국가와 도시 단위의 마커와 스탬프로 정리합니다."
+        description="Organize running activities into country and city markers."
       />
 
       <button
@@ -73,7 +73,7 @@ onMounted(loadPassport)
         :disabled="syncStore.isSyncing"
         @click="syncAndReload"
       >
-        {{ syncStore.isSyncing ? '동기화 중' : '활동 동기화' }}
+        {{ syncStore.isSyncing ? 'Syncing' : 'Sync activities' }}
       </button>
     </div>
 
@@ -92,9 +92,9 @@ onMounted(loadPassport)
       v-if="syncStore.lastResult"
       class="mb-5 rounded border border-trail/25 bg-white p-3 text-sm text-ink/70"
     >
-      요청 {{ formatInteger(syncStore.lastResult.requestedCount) }}개,
-      저장 {{ formatInteger(syncStore.lastResult.syncedCount) }}개,
-      위치 변환 {{ formatInteger(syncStore.lastResult.geocodedCount) }}개
+      Requested {{ formatInteger(syncStore.lastResult.requestedCount) }},
+      saved {{ formatInteger(syncStore.lastResult.syncedCount) }},
+      geocoded {{ formatInteger(syncStore.lastResult.geocodedCount) }}
     </div>
 
     <div v-if="isLoading" class="space-y-5">
@@ -112,8 +112,8 @@ onMounted(loadPassport)
 
         <section class="rounded border border-black/10 bg-white">
           <div class="border-b border-black/10 px-4 py-3">
-            <h2 class="font-semibold text-ink">최근 방문 도시</h2>
-            <p class="mt-1 text-xs text-ink/55">최근 러닝 기록 기준입니다.</p>
+            <h2 class="font-semibold text-ink">Recent Cities</h2>
+            <p class="mt-1 text-xs text-ink/55">Based on the most recent running records.</p>
           </div>
 
           <div v-if="recentPlaces.length" class="divide-y divide-black/10">
@@ -134,7 +134,7 @@ onMounted(loadPassport)
           </div>
 
           <div v-else class="px-4 py-8 text-sm text-ink/60">
-            최근 방문 도시가 없습니다.
+            No recent city records yet.
           </div>
         </section>
       </div>
@@ -142,8 +142,8 @@ onMounted(loadPassport)
       <section>
         <div class="mb-4 flex items-end justify-between gap-3">
           <div>
-            <h2 class="text-lg font-semibold text-ink">국가 스탬프</h2>
-            <p class="mt-1 text-sm text-ink/60">누적 거리 기준 상위 국가입니다.</p>
+            <h2 class="text-lg font-semibold text-ink">Country Markers</h2>
+            <p class="mt-1 text-sm text-ink/60">Top countries by total distance.</p>
           </div>
           <p class="text-sm text-ink/50">{{ countries.length }} countries</p>
         </div>
@@ -156,15 +156,15 @@ onMounted(loadPassport)
           />
         </div>
         <div v-else class="rounded border border-black/10 bg-white p-6 text-sm text-ink/60">
-          국가 기록이 없습니다.
+          No country records yet.
         </div>
       </section>
 
       <section>
         <div class="mb-4 flex items-end justify-between gap-3">
           <div>
-            <h2 class="text-lg font-semibold text-ink">도시 스탬프</h2>
-            <p class="mt-1 text-sm text-ink/60">도시별 러닝 마커입니다.</p>
+            <h2 class="text-lg font-semibold text-ink">City Markers</h2>
+            <p class="mt-1 text-sm text-ink/60">Running markers grouped by city.</p>
           </div>
           <p class="text-sm text-ink/50">{{ cities.length }} cities</p>
         </div>
@@ -173,7 +173,7 @@ onMounted(loadPassport)
           <CityCard v-for="city in topCities" :key="city.visitedPlaceId" :city="city" />
         </div>
         <div v-else class="rounded border border-black/10 bg-white p-6 text-sm text-ink/60">
-          도시 기록이 없습니다.
+          No city records yet.
         </div>
       </section>
     </div>

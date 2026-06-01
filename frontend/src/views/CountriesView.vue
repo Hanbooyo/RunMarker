@@ -67,7 +67,7 @@ function compareValues(left, right, type = 'text') {
     return toTime(left) - toTime(right)
   }
 
-  return String(left || '').localeCompare(String(right || ''), 'ko-KR')
+  return String(left || '').localeCompare(String(right || ''), 'en-US')
 }
 
 function toTime(value) {
@@ -76,10 +76,10 @@ function toTime(value) {
 
 function sortIcon(key) {
   if (sortKey.value !== key) {
-    return '↕'
+    return '-'
   }
 
-  return sortDirection.value === 'asc' ? '↑' : '↓'
+  return sortDirection.value === 'asc' ? 'ASC' : 'DESC'
 }
 
 onMounted(loadCountries)

@@ -87,7 +87,7 @@ describe('PassportMap', () => {
       expect(setView).toHaveBeenCalled()
     })
 
-    expect(wrapper.text()).toContain('표시할 도시 마커가 없습니다.')
+    expect(wrapper.text()).toContain('No city markers to display.')
   })
 
   it('removes leaflet instance on destroy', async () => {

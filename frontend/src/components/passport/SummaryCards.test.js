@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import SummaryCards from './SummaryCards.vue'
 
 describe('SummaryCards', () => {
-  it('renders passport summary values', () => {
+  it('renders marker summary values', () => {
     const wrapper = mount(SummaryCards, {
       props: {
         summary: {
@@ -15,7 +15,7 @@ describe('SummaryCards', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('달린 국가')
+    expect(wrapper.text()).toContain('Countries run')
     expect(wrapper.text()).toContain('3')
     expect(wrapper.text()).toContain('12')
     expect(wrapper.text()).toContain('123.5 km')

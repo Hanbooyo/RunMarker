@@ -7,7 +7,7 @@ describe('formatters', () => {
     expect(formatKm(null)).toBe('0.0 km')
   })
 
-  it('formats integers for Korean locale', () => {
+  it('formats integers for English locale', () => {
     expect(formatInteger(12345)).toBe('12,345')
     expect(formatInteger(undefined)).toBe('0')
   })

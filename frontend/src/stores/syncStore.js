@@ -23,7 +23,7 @@ export const useSyncStore = defineStore('sync', () => {
       lastResult.value = await syncApi.syncActivities(mode)
       return lastResult.value
     } catch (error) {
-      errorMessage.value = error.response?.data?.message || '동기화에 실패했습니다.'
+      errorMessage.value = error.response?.data?.message || 'Sync failed.'
       throw error
     } finally {
       if (mode !== 'full') {
@@ -66,14 +66,14 @@ export const useSyncStore = defineStore('sync', () => {
         currentJobId.value = null
 
         if (status.status === 'FAILED') {
-          errorMessage.value = status.errorMessage || '전체 동기화에 실패했습니다.'
+          errorMessage.value = status.errorMessage || 'Full sync failed.'
         }
       }
     } catch (error) {
       stopPolling()
       isSyncing.value = false
       activeMode.value = ''
-      errorMessage.value = error.response?.data?.message || '동기화 상태 조회에 실패했습니다.'
+      errorMessage.value = error.response?.data?.message || 'Failed to check sync status.'
     }
   }
 

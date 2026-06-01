@@ -24,15 +24,15 @@ defineProps({
 
     <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
       <div>
-        <dt class="text-ink/50">누적 거리</dt>
+        <dt class="text-ink/50">Total distance</dt>
         <dd class="mt-1 font-semibold text-ink">{{ formatKm(city.totalDistanceKm) }}</dd>
       </div>
       <div>
-        <dt class="text-ink/50">활동 수</dt>
+        <dt class="text-ink/50">Activities</dt>
         <dd class="mt-1 font-semibold text-ink">{{ formatInteger(city.activityCount) }}</dd>
       </div>
       <div class="col-span-2">
-        <dt class="text-ink/50">최근 러닝 날짜</dt>
+        <dt class="text-ink/50">Latest run date</dt>
         <dd class="mt-1 font-semibold text-ink">{{ formatDate(city.lastActivityAt) }}</dd>
       </div>
     </dl>

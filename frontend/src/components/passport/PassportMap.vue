@@ -57,10 +57,10 @@ function buildPopupHtml(marker) {
     <div style="min-width: 200px">
       <div style="font-weight: 700; margin-bottom: 6px;">${escapeHtml(marker.cityName)}</div>
       <div style="color: #4b5563; margin-bottom: 8px;">${escapeHtml(marker.countryName)}</div>
-      <div>누적 거리: <strong>${formatKm(marker.totalDistanceKm)}</strong></div>
-      <div>활동 수: <strong>${formatInteger(marker.activityCount)}</strong></div>
-      <div>첫 러닝: <strong>${formatDate(marker.firstActivityAt)}</strong></div>
-      <div>최근 러닝: <strong>${formatDate(marker.lastActivityAt)}</strong></div>
+      <div>Total distance: <strong>${formatKm(marker.totalDistanceKm)}</strong></div>
+      <div>Activities: <strong>${formatInteger(marker.activityCount)}</strong></div>
+      <div>First run: <strong>${formatDate(marker.firstActivityAt)}</strong></div>
+      <div>Latest run: <strong>${formatDate(marker.lastActivityAt)}</strong></div>
     </div>
   `
 }
@@ -122,7 +122,7 @@ async function loadMarkers() {
     initializeMap()
     renderMarkers()
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || '지도 마커를 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || 'Failed to load map markers.'
     markers.value = []
     renderMarkers()
   } finally {
@@ -153,8 +153,8 @@ defineExpose({
   <section class="rounded border border-black/10 bg-white">
     <div class="flex items-center justify-between border-b border-black/10 px-4 py-3">
       <div>
-        <h2 class="font-semibold text-ink">방문 도시 지도</h2>
-        <p class="mt-1 text-xs text-ink/55">러닝 시작 위치 기준으로 도시 마커를 표시합니다.</p>
+        <h2 class="font-semibold text-ink">Visited City Map</h2>
+        <p class="mt-1 text-xs text-ink/55">City markers are based on activity start locations.</p>
       </div>
       <span class="text-xs font-medium text-ink/50">{{ markers.length }} markers</span>
     </div>
@@ -170,14 +170,14 @@ defineExpose({
         v-if="isLoading"
         class="absolute inset-0 grid place-items-center bg-white/70 text-sm font-medium text-ink/60"
       >
-        지도 데이터를 불러오는 중입니다.
+        Loading map data.
       </div>
 
       <div
         v-else-if="!markers.length"
         class="pointer-events-none absolute inset-0 grid place-items-center bg-white/75 text-sm text-ink/60"
       >
-        표시할 도시 마커가 없습니다.
+        No city markers to display.
       </div>
     </div>
   </section>

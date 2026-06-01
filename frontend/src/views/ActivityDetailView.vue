@@ -24,7 +24,7 @@ async function loadActivity() {
   try {
     activity.value = await activitiesApi.get(props.id)
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || '활동 상세를 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || 'Failed to load activity details.'
   } finally {
     isLoading.value = false
   }
@@ -35,9 +35,12 @@ onMounted(loadActivity)
 
 <template>
   <AppLayout>
-    <PageHeader title="Activity Detail" description="활동의 기본 정보와 시작 위치 기반 장소 정보를 확인합니다." />
+    <PageHeader
+      title="Activity Detail"
+      description="Review basic activity information and the place derived from the start location."
+    />
 
-    <p v-if="isLoading" class="text-sm text-ink/60">불러오는 중입니다.</p>
+    <p v-if="isLoading" class="text-sm text-ink/60">Loading.</p>
     <p v-else-if="errorMessage" class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
       {{ errorMessage }}
     </p>

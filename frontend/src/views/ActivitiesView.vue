@@ -18,7 +18,7 @@ async function loadActivities() {
     const data = await activitiesApi.list({ page: 0, size: 50 })
     activities.value = data.activities || []
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || '활동 목록을 불러오지 못했습니다.'
+    errorMessage.value = error.response?.data?.message || 'Failed to load activities.'
   } finally {
     isLoading.value = false
   }
@@ -29,9 +29,9 @@ onMounted(loadActivities)
 
 <template>
   <AppLayout>
-    <PageHeader title="Activities" description="저장된 러닝 활동 목록입니다." />
+    <PageHeader title="Activities" description="Review your imported running activities." />
 
-    <p v-if="isLoading" class="text-sm text-ink/60">불러오는 중입니다.</p>
+    <p v-if="isLoading" class="text-sm text-ink/60">Loading.</p>
     <p v-else-if="errorMessage" class="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
       {{ errorMessage }}
     </p>
@@ -40,11 +40,11 @@ onMounted(loadActivities)
       <table class="min-w-[860px] text-left text-sm">
         <thead class="bg-mist text-xs uppercase text-ink/55">
           <tr>
-            <th class="px-4 py-3">활동</th>
-            <th class="px-4 py-3">날짜</th>
-            <th class="px-4 py-3">거리</th>
-            <th class="px-4 py-3">도시</th>
-            <th class="px-4 py-3">국가</th>
+            <th class="px-4 py-3">Activity</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3">Distance</th>
+            <th class="px-4 py-3">City</th>
+            <th class="px-4 py-3">Country</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-black/10">
