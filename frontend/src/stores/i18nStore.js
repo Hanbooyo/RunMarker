@@ -149,7 +149,7 @@ function resolvePath(source, path) {
 }
 
 export const useI18nStore = defineStore('i18n', () => {
-  const locale = ref(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stravamate.locale') || 'ko')
+  const locale = ref(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stravamate.locale') || 'en')
 
   const currentLocaleLabel = computed(() => messages[locale.value]?.common?.[locale.value === 'ko' ? 'korean' : 'english'])
 
@@ -164,7 +164,7 @@ export const useI18nStore = defineStore('i18n', () => {
   }
 
   function t(path) {
-    return resolvePath(messages[locale.value], path) || resolvePath(messages.ko, path) || path
+    return resolvePath(messages[locale.value], path) || resolvePath(messages.en, path) || path
   }
 
   return {
