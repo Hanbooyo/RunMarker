@@ -40,7 +40,7 @@ host: localhost
 port: 5432
 database: stravamate_passport
 username: stravamate
-password: stravamate
+password: replace-with-local-db-password
 ```
 
 종료:
@@ -61,7 +61,7 @@ docker compose down -v
 
 ```sql
 CREATE DATABASE stravamate_passport;
-CREATE USER stravamate WITH PASSWORD 'stravamate';
+CREATE USER stravamate WITH PASSWORD 'replace-with-local-db-password';
 GRANT ALL PRIVILEGES ON DATABASE stravamate_passport TO stravamate;
 ```
 
@@ -91,7 +91,7 @@ PowerShell에서 환경변수를 설정한 뒤 실행합니다.
 ```powershell
 $env:DB_URL="jdbc:postgresql://localhost:5432/stravamate_passport"
 $env:DB_USERNAME="stravamate"
-$env:DB_PASSWORD="stravamate"
+$env:DB_PASSWORD="replace-with-local-db-password"
 $env:STRAVA_CLIENT_ID="your-strava-client-id"
 $env:STRAVA_CLIENT_SECRET="your-strava-client-secret"
 $env:STRAVA_REDIRECT_URI="http://localhost:8080/api/auth/strava/callback"

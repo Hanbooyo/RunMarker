@@ -79,7 +79,7 @@ host: localhost
 port: 5432
 database: stravamate_passport
 username: stravamate
-password: stravamate
+password: replace-with-local-docker-password
 ```
 
 상태 확인:

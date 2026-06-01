@@ -89,7 +89,7 @@ Wrapper가 추가된 뒤에는 다음 명령을 사용할 수 있습니다.
 ```text
 DB_URL=jdbc:postgresql://localhost:5432/stravamate_passport
 DB_USERNAME=stravamate
-DB_PASSWORD=stravamate
+DB_PASSWORD=replace-with-local-db-password
 SESSION_TIMEOUT=60m
 STRAVA_CLIENT_ID=your-client-id
 STRAVA_CLIENT_SECRET=your-client-secret

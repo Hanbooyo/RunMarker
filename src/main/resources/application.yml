@@ -5,7 +5,7 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/stravamate_passport}
     username: ${DB_USERNAME:stravamate}
-    password: ${DB_PASSWORD:stravamate}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
 
   flyway:

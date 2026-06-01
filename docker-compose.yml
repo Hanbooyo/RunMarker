@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-stravamate_passport}
       POSTGRES_USER: ${POSTGRES_USER:-stravamate}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stravamate}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.docker}
     ports:
       - "5432:5432"
     volumes:
@@ -30,7 +30,7 @@ services:
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-stravamate_passport}
       DB_USERNAME: ${POSTGRES_USER:-stravamate}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-stravamate}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.docker}
       SERVER_PORT: ${SERVER_PORT:-8080}
       SESSION_TIMEOUT: ${SESSION_TIMEOUT:-60m}
       FRONTEND_BASE_URL: ${FRONTEND_BASE_URL:-http://localhost:5173}
